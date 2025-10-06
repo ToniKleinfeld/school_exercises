@@ -1,25 +1,41 @@
 # KI Prompt Generator für Bildungsaufgaben
 
-Eine Python-Anwendung mit GUI zur Generierung von KI-Prompts für Bildungsaufgaben, speziell angepasst für das deutsche Schulsystem.
+Eine Python-Anwendung mit GUI zur Gene## Beispiel-Output
+
+````
+Generate 8 exercises for 10. Klasse students in Mathematik on the topic "Quadratische Gleichungen".
+The exercises should include the following types: Multiple Choice, Rechenaufgaben und Problemlösung.
+Distribute the questions evenly across the selected exercise types.
+Include detailed answers and explanations for each question.
+
+Output requirements:
+- Create two separate PDFs:
+  1. Exercise sheet (questions only) - multi-page format suitable for students
+  2. Answer sheet (questions with solutions and explanations) - for teachers
+
+Format the response as structured text that can be easily converted to PDF format.
+```von KI-Prompts für Bildungsaufgaben, speziell angepasst für das deutsche Schulsystem.
 
 ## Features
 
 - ✅ Einfache Tkinter-GUI auf Deutsch
 - ✅ Deutsche Schulfächer und Klassenstufen
-- ✅ Eingabefelder für Klasse, Fach, Thema, Aufgabentyp und Anzahl
-- ✅ Automatische Prompt-Generierung im gewünschten Format
+- ✅ **Fachspezifische Aufgabentypen** - nur sinnvolle Kombinationen werden angezeigt
+- ✅ **Mehrfachauswahl von Aufgabentypen** - Checkboxes für flexible Auswahl
+- ✅ Automatische Prompt-Generierung mit PDF-Ausgabe-Anforderung
 - ✅ Copy-to-Clipboard Funktionalität
-- ✅ Eingabevalidierung auf Deutsch
+- ✅ Intelligente Eingabevalidierung
 - ✅ Modulare Struktur für bessere Wartbarkeit
 - ✅ Erweiterbar für zukünftige KI-API Integration
 
 ## Struktur
 
-Das Projekt ist in drei Module aufgeteilt:
+Das Projekt ist in vier Module aufgeteilt:
 
 - **`ai_prompt_generator.py`**: Hauptanwendung - koordiniert UI und Prompt-Generierung
 - **`ui.py`**: Benutzeroberfläche - alle GUI-Komponenten und Interaktionen
 - **`create_prompt.py`**: Prompt-Generierung - Geschäftslogik für Prompt-Erstellung
+- **`config.py`**: Konfiguration - alle Konstanten, Fächer, Aufgabentypen und UI-Einstellungen
 
 ## Installation
 
@@ -28,7 +44,7 @@ Das Projekt ist in drei Module aufgeteilt:
 
 ```bash
 pip install -r requirements.txt
-```
+````
 
 ## Nutzung
 
@@ -60,8 +76,27 @@ Die Anwendung unterstützt folgende Fächer des deutschen Schulsystems:
 1. **Klasse/Jahrgangsstufe**: Wähle die Klassenstufe
 2. **Fach**: Wähle das Schulfach
 3. **Thema**: Gib das spezifische Thema ein
-4. **Aufgabentyp**: Wähle den Aufgabentyp (Multiple Choice, Offene Fragen, etc.)
+4. **Aufgabentypen**: Wähle einen oder mehrere passende Aufgabentypen (erscheinen nach Fachauswahl)
 5. **Anzahl der Aufgaben**: Anzahl der gewünschten Aufgaben
+
+## Intelligente Aufgabentyp-Zuordnung
+
+Die App zeigt nur sinnvolle Aufgabentypen für das gewählte Fach an:
+
+- **Mathematik/Physik/Chemie**: Rechenaufgaben, Problemlösung, Multiple Choice, etc.
+- **Deutsch/Geschichte**: Aufsatzfragen, Interpretationsaufgaben, Erörterung, etc.
+- **Fremdsprachen**: Lückentext, Multiple Choice, Aufsatzfragen, etc.
+- **Naturwissenschaften**: Analyseaufgaben, Multiple Choice, Kurze Antworten, etc.
+
+## Neue Prompt-Funktionen
+
+Der generierte Prompt fordert jetzt an:
+
+- Mehrere Aufgabentypen gleichzeitig
+- Gleichmäßige Verteilung der Fragen
+- **Zwei separate PDF-Dateien**:
+  1. Aufgabenblatt (nur Fragen) für Schüler
+  2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrer
 
 ## Beispiel-Output
 
@@ -74,12 +109,24 @@ Format the output in JSON.
 
 ## Erweiterbarkeit
 
-Die modulare Struktur macht Erweiterungen einfach:
+Die modulare Struktur macht Erweiterungen sehr einfach:
 
-- **KI-API Integration**: Erweitere `create_prompt.py` um API-Calls
-- **Neue UI-Elemente**: Modifiziere `ui.py`
-- **Zusätzliche Validierung**: Erweitere die Validierungsmethoden
-- **Export-Funktionen**: Füge neue Output-Formate hinzu
+- **`config.py`**: Neue Fächer, Aufgabentypen oder UI-Texte hinzufügen
+- **`create_prompt.py`**: KI-API Integration oder neue Prompt-Templates
+- **`ui.py`**: Neue UI-Elemente oder Interaktionen
+- **Neue Sprachen**: Einfach neue config-Dateien für andere Länder erstellen
+
+### Beispiel: Neues Fach hinzufügen
+
+```python
+# In config.py
+SUBJECTS = SUBJECTS + ("Neues Fach",)
+
+EXERCISE_MAPPINGS["Neues Fach"] = [
+    "Multiple Choice",
+    "Spezielle Aufgaben für dieses Fach"
+]
+```
 
 ## Technische Details
 
