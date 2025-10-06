@@ -84,8 +84,10 @@ class AIPromptGeneratorUI:
         # Output section
         self.create_output_section(main_frame)
 
-        # Copy button - placed after output section
-        self.copy_button = ttk.Button(main_frame, text=COPY_BUTTON_TEXT, command=self.copy_to_clipboard)
+        # Copy button - placed after output section (using tk.Button for better styling support)
+        self.copy_button = tk.Button(
+            main_frame, text=COPY_BUTTON_TEXT, command=self.copy_to_clipboard, font=LABEL_FONT, relief="raised", bd=2
+        )
         self.copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
     def create_input_fields(self, parent):
@@ -291,13 +293,13 @@ class AIPromptGeneratorUI:
         # Store original button properties
         original_text = self.copy_button.cget("text")
         original_relief = self.copy_button.cget("relief")
-        original_bg = self.copy_button.cget("background")
+        original_bg = self.copy_button.cget("bg")
 
-        # Set success styling
-        self.copy_button.configure(text="✓ Copy to Clipboard", relief="solid", background="lightgreen")
+        # Set success styling (now works with tk.Button)
+        self.copy_button.configure(text="✓ Copy to Clipboard", relief="solid", bg="lightgreen")
 
         # Reset to original styling after 2 seconds
         def reset_button():
-            self.copy_button.configure(text=original_text, relief=original_relief, background=original_bg)
+            self.copy_button.configure(text=original_text, relief=original_relief, bg=original_bg)
 
         self.root.after(2000, reset_button)
