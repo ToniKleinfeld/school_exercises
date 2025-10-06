@@ -76,10 +76,11 @@ class AIPromptGeneratorUI:
         self.create_input_fields(main_frame)
 
         # Generate button
-        generate_btn = ttk.Button(
-            main_frame, text=GENERATE_BUTTON_TEXT, command=self.generate_prompt, style="Accent.TButton"
+        # Generate button - using tk.Button for consistent styling with copy button
+        self.generate_button = tk.Button(
+            main_frame, text=GENERATE_BUTTON_TEXT, command=self.generate_prompt, font=LABEL_FONT, relief="raised", bd=2
         )
-        generate_btn.grid(row=8, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
+        self.generate_button.grid(row=8, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
 
         # Output section
         self.create_output_section(main_frame)
@@ -257,8 +258,9 @@ class AIPromptGeneratorUI:
         except Exception:
             pass  # Silent fail for auto-copy
 
-        # Show visual feedback: green flash for text area
+        # Show visual feedback: green flash for text area AND button success
         self.show_text_area_success()
+        self.show_generate_button_success()
 
     def copy_to_clipboard(self):
         """Copy the generated prompt to clipboard"""
@@ -301,5 +303,21 @@ class AIPromptGeneratorUI:
         # Reset to original styling after 2 seconds
         def reset_button():
             self.copy_button.configure(text=original_text, relief=original_relief, bg=original_bg)
+
+        self.root.after(2000, reset_button)
+
+    def show_generate_button_success(self):
+        """Show green flash feedback for successful prompt generation"""
+        # Store original button properties
+        original_text = self.generate_button.cget("text")
+        original_relief = self.generate_button.cget("relief")
+        original_bg = self.generate_button.cget("bg")
+
+        # Set success styling
+        self.generate_button.configure(text="✓ Generate Prompt", relief="solid", bg="lightgreen")
+
+        # Reset to original styling after 2 seconds
+        def reset_button():
+            self.generate_button.configure(text=original_text, relief=original_relief, bg=original_bg)
 
         self.root.after(2000, reset_button)

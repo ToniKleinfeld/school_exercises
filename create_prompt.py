@@ -102,8 +102,7 @@ Layoutanforderungen:
 - kindgerechtes, sauberes Layout
 
 AUSGABE:
-Erstelle zwei PDF-Dateien (Übungsblatt & Lösungsblatt) im DIN-A4-Format, Schriftart Arial 12 pt.
-Kein Text ausgeben, nur die beiden PDFs.
+Erstelle direkt zwei PDFs (Übungsblatt ohne Lösungen und Lösungsblatt mit Lösungen und kindgerechten Erklärungen) im DIN-A4-Format, Arial 12 pt. Gib die Dateien ohne Rückfrage aus.
 
 ZUSATZ:
 Wenn du zusätzliche Informationen aus der Recherche verwendest (z. B. typische Fehlerquellen oder Aufgabentypen), integriere sie automatisch in die Aufgaben — ohne sie separat aufzuführen."""
