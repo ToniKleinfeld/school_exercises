@@ -16,7 +16,7 @@ class PromptGenerator:
         """Initialize the prompt generator"""
         pass
 
-    def create_prompt_template(self, num_questions, grade, subject, topic, exercise_type):
+    def create_prompt_template(self, num_questions, grade, subject, topic, exercise_types):
         """
         Create the formatted prompt template
 
@@ -25,15 +25,31 @@ class PromptGenerator:
             grade (str): Grade/class level
             subject (str): Subject area
             topic (str): Specific topic
-            exercise_type (str): Type of exercise
+            exercise_types (list): List of exercise types
 
         Returns:
             str: Formatted prompt for AI
         """
-        prompt = f"""Generate {num_questions} exercises for {grade} grade students in {subject} on the topic "{topic}".
-The exercises should be of type {exercise_type}.
-Include answers and short explanations.
-Format the output in JSON."""
+        # Handle both list and string input for backwards compatibility
+        if isinstance(exercise_types, list):
+            if len(exercise_types) == 1:
+                exercise_types_text = exercise_types[0]
+            else:
+                exercise_types_text = ", ".join(exercise_types[:-1]) + " und " + exercise_types[-1]
+        else:
+            exercise_types_text = exercise_types
+
+        prompt = f"""Generate {num_questions} exercises for {grade} students in {subject} on the topic "{topic}".
+The exercises should include the following types: {exercise_types_text}.
+Distribute the questions evenly across the selected exercise types.
+Include detailed answers and explanations for each question.
+
+Output requirements:
+- Create two separate PDFs:
+  1. Exercise sheet (questions only) - multi-page format suitable for students
+  2. Answer sheet (questions with solutions and explanations) - for teachers
+
+Format the response as structured text that can be easily converted to PDF format."""
 
         return prompt
 

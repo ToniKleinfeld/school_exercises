@@ -4,7 +4,7 @@ UI Module for AI Prompt Generator
 This module contains all user interface components and handles user interactions.
 It provides a clean separation between UI logic and business logic.
 
-Author: AI Assistant
+Author: Toni Kleinfeld
 Date: October 2025
 """
 
@@ -31,7 +31,7 @@ class AIPromptGeneratorUI:
 
     def setup_window(self):
         """Configure the main window properties"""
-        self.root.title("KI Prompt Generator für Bildungsaufgaben")
+        self.root.title("KI Prompt Generator für Übungsaufgaben zum Lernen")
         self.root.geometry("700x600")
         self.root.resizable(True, True)
 
@@ -51,7 +51,7 @@ class AIPromptGeneratorUI:
         main_frame.columnconfigure(1, weight=1)
 
         # Title
-        title_label = ttk.Label(main_frame, text="KI Prompt Generator", font=("Arial", 16, "bold"))
+        title_label = ttk.Label(main_frame, text="Übungsaufgaben Prompt Generator", font=("Arial", 18, "bold"))
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
 
         # Input fields
@@ -61,13 +61,14 @@ class AIPromptGeneratorUI:
         generate_btn = ttk.Button(
             main_frame, text="Generate Prompt", command=self.generate_prompt, style="Accent.TButton"
         )
-        generate_btn.grid(row=6, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
+        generate_btn.grid(row=7, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
 
         # Output section
         self.create_output_section(main_frame)
 
         # Copy button
         copy_btn = ttk.Button(main_frame, text="Copy to Clipboard", command=self.copy_to_clipboard)
+        copy_btn.grid(row=10, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
         copy_btn.grid(row=9, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
     def create_input_fields(self, parent):
@@ -124,6 +125,7 @@ class AIPromptGeneratorUI:
             "Wirtschaft",
         )
         subject_combo.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+        subject_combo.bind("<<ComboboxSelected>>", self.on_subject_changed)
 
         # Topic
         ttk.Label(parent, text="Thema:").grid(row=3, column=0, sticky=tk.W, pady=5)
@@ -131,43 +133,166 @@ class AIPromptGeneratorUI:
         topic_entry = ttk.Entry(parent, textvariable=self.topic_var, width=40)
         topic_entry.grid(row=3, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
 
-        # Exercise Type - German terms
-        ttk.Label(parent, text="Aufgabentyp:").grid(row=4, column=0, sticky=tk.W, pady=5)
-        self.exercise_type_var = tk.StringVar()
-        exercise_combo = ttk.Combobox(parent, textvariable=self.exercise_type_var, width=40)
-        exercise_combo["values"] = (
-            "Multiple Choice",
-            "Offene Fragen",
-            "Richtig/Falsch",
-            "Lückentext",
-            "Kurze Antworten",
-            "Aufsatzfragen",
-            "Problemlösung",
-            "Rechenaufgaben",
-            "Analyseaufgaben",
-            "Interpretationsaufgaben",
-            "Erörterung",
-        )
-        exercise_combo.grid(row=4, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+        # Exercise Types - Multiple selection with checkboxes
+        self.create_exercise_type_section(parent)
 
         # Number of Questions
-        ttk.Label(parent, text="Anzahl der Aufgaben:").grid(row=5, column=0, sticky=tk.W, pady=5)
+        ttk.Label(parent, text="Anzahl der Aufgaben:").grid(row=6, column=0, sticky=tk.W, pady=5)
         self.num_questions_var = tk.StringVar(value="5")
         num_spinbox = ttk.Spinbox(parent, from_=1, to=50, textvariable=self.num_questions_var, width=38)
-        num_spinbox.grid(row=5, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+        num_spinbox.grid(row=6, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+
+    def create_exercise_type_section(self, parent):
+        """Create exercise type selection with checkboxes"""
+        ttk.Label(parent, text="Aufgabentypen:").grid(row=4, column=0, sticky=(tk.W, tk.N), pady=5)
+
+        # Frame for checkboxes
+        self.exercise_frame = ttk.Frame(parent)
+        self.exercise_frame.grid(row=4, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+
+        # Dictionary to store checkbox variables
+        self.exercise_type_vars = {}
+
+        # Initially empty - will be populated when subject is selected
+        self.exercise_checkboxes = []
+
+    def get_exercise_types_for_subject(self, subject):
+        """Get appropriate exercise types for the selected subject"""
+        exercise_mappings = {
+            "Mathematik": ["Multiple Choice", "Rechenaufgaben", "Problemlösung", "Kurze Antworten", "Analyseaufgaben"],
+            "Deutsch": [
+                "Multiple Choice",
+                "Offene Fragen",
+                "Lückentext",
+                "Aufsatzfragen",
+                "Interpretationsaufgaben",
+                "Erörterung",
+                "Analyseaufgaben",
+            ],
+            "Englisch": [
+                "Multiple Choice",
+                "Lückentext",
+                "Kurze Antworten",
+                "Aufsatzfragen",
+                "Offene Fragen",
+                "Richtig/Falsch",
+            ],
+            "Französisch": [
+                "Multiple Choice",
+                "Lückentext",
+                "Kurze Antworten",
+                "Aufsatzfragen",
+                "Offene Fragen",
+                "Richtig/Falsch",
+            ],
+            "Spanisch": [
+                "Multiple Choice",
+                "Lückentext",
+                "Kurze Antworten",
+                "Aufsatzfragen",
+                "Offene Fragen",
+                "Richtig/Falsch",
+            ],
+            "Latein": [
+                "Multiple Choice",
+                "Lückentext",
+                "Kurze Antworten",
+                "Interpretationsaufgaben",
+                "Analyseaufgaben",
+            ],
+            "Physik": ["Multiple Choice", "Rechenaufgaben", "Problemlösung", "Kurze Antworten", "Analyseaufgaben"],
+            "Chemie": ["Multiple Choice", "Rechenaufgaben", "Problemlösung", "Kurze Antworten", "Analyseaufgaben"],
+            "Biologie": ["Multiple Choice", "Offene Fragen", "Kurze Antworten", "Analyseaufgaben", "Richtig/Falsch"],
+            "Geschichte": [
+                "Multiple Choice",
+                "Offene Fragen",
+                "Aufsatzfragen",
+                "Analyseaufgaben",
+                "Interpretationsaufgaben",
+                "Erörterung",
+            ],
+            "Geographie": ["Multiple Choice", "Offene Fragen", "Kurze Antworten", "Analyseaufgaben", "Richtig/Falsch"],
+            "Politik/Wirtschaft": [
+                "Multiple Choice",
+                "Offene Fragen",
+                "Aufsatzfragen",
+                "Analyseaufgaben",
+                "Erörterung",
+            ],
+            "Sozialwissenschaften": [
+                "Multiple Choice",
+                "Offene Fragen",
+                "Aufsatzfragen",
+                "Analyseaufgaben",
+                "Erörterung",
+            ],
+            "Religion": ["Multiple Choice", "Offene Fragen", "Aufsatzfragen", "Erörterung", "Interpretationsaufgaben"],
+            "Ethik": ["Multiple Choice", "Offene Fragen", "Aufsatzfragen", "Erörterung", "Analyseaufgaben"],
+            "Philosophie": [
+                "Multiple Choice",
+                "Offene Fragen",
+                "Aufsatzfragen",
+                "Erörterung",
+                "Interpretationsaufgaben",
+                "Analyseaufgaben",
+            ],
+            "Kunst": [
+                "Multiple Choice",
+                "Offene Fragen",
+                "Analyseaufgaben",
+                "Interpretationsaufgaben",
+                "Kurze Antworten",
+            ],
+            "Musik": ["Multiple Choice", "Offene Fragen", "Analyseaufgaben", "Kurze Antworten", "Richtig/Falsch"],
+            "Sport": ["Multiple Choice", "Offene Fragen", "Kurze Antworten", "Richtig/Falsch"],
+            "Informatik": ["Multiple Choice", "Problemlösung", "Kurze Antworten", "Analyseaufgaben", "Rechenaufgaben"],
+            "Technik": ["Multiple Choice", "Problemlösung", "Kurze Antworten", "Analyseaufgaben", "Rechenaufgaben"],
+            "Wirtschaft": ["Multiple Choice", "Offene Fragen", "Rechenaufgaben", "Analyseaufgaben", "Problemlösung"],
+        }
+
+        return exercise_mappings.get(subject, ["Multiple Choice", "Offene Fragen", "Kurze Antworten"])
+
+    def on_subject_changed(self, event=None):
+        """Handle subject selection change"""
+        selected_subject = self.subject_var.get()
+        if not selected_subject:
+            return
+
+        # Clear existing checkboxes
+        for checkbox in self.exercise_checkboxes:
+            checkbox.destroy()
+        self.exercise_checkboxes.clear()
+        self.exercise_type_vars.clear()
+
+        # Get exercise types for selected subject
+        exercise_types = self.get_exercise_types_for_subject(selected_subject)
+
+        # Create new checkboxes
+        for i, exercise_type in enumerate(exercise_types):
+            var = tk.BooleanVar()
+            self.exercise_type_vars[exercise_type] = var
+
+            checkbox = ttk.Checkbutton(self.exercise_frame, text=exercise_type, variable=var)
+
+            # Arrange in columns for better layout
+            row = i // 2
+            col = i % 2
+            checkbox.grid(row=row, column=col, sticky=tk.W, padx=(0, 20), pady=2)
+
+            self.exercise_checkboxes.append(checkbox)
 
     def create_output_section(self, parent):
         """Create the output section with generated prompt display"""
         # Output label
         output_label = ttk.Label(parent, text="Generierter Prompt:", font=("Arial", 12, "bold"))
-        output_label.grid(row=7, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
+        output_label.grid(row=8, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
 
         # Output text area with scrollbar
         self.output_text = scrolledtext.ScrolledText(parent, height=8, width=70, wrap=tk.WORD, font=("Consolas", 10))
-        self.output_text.grid(row=8, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+        self.output_text.grid(row=9, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
 
         # Configure text area to expand
-        parent.rowconfigure(8, weight=1)
+        parent.rowconfigure(9, weight=1)
 
     def generate_prompt(self):
         """Generate the AI prompt based on user inputs"""
@@ -175,20 +300,35 @@ class AIPromptGeneratorUI:
         grade = self.grade_var.get()
         subject = self.subject_var.get()
         topic = self.topic_var.get()
-        exercise_type = self.exercise_type_var.get()
         num_questions = self.num_questions_var.get()
+
+        # Get selected exercise types from checkboxes
+        selected_exercise_types = []
+        for exercise_type, var in self.exercise_type_vars.items():
+            if var.get():
+                selected_exercise_types.append(exercise_type)
+
+        # Convert list to string for validation (backwards compatibility)
+        exercise_types_str = ", ".join(selected_exercise_types) if selected_exercise_types else ""
 
         # Validate inputs using the prompt generator
         is_valid, error_message = self.prompt_generator.validate_inputs(
-            grade, subject, topic, exercise_type, num_questions
+            grade, subject, topic, exercise_types_str, num_questions
         )
+
+        # Additional validation for exercise types
+        if is_valid and not selected_exercise_types:
+            is_valid = False
+            error_message = "Bitte wählen Sie mindestens einen Aufgabentyp aus."
 
         if not is_valid:
             messagebox.showerror("Eingabefehler", error_message)
             return
 
         # Generate the prompt using the prompt generator
-        prompt = self.prompt_generator.create_prompt_template(num_questions, grade, subject, topic, exercise_type)
+        prompt = self.prompt_generator.create_prompt_template(
+            num_questions, grade, subject, topic, selected_exercise_types
+        )
 
         # Display the prompt in the output area
         self.output_text.delete(1.0, tk.END)
