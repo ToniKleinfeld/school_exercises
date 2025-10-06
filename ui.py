@@ -85,8 +85,8 @@ class AIPromptGeneratorUI:
         self.create_output_section(main_frame)
 
         # Copy button - placed after output section
-        copy_btn = ttk.Button(main_frame, text=COPY_BUTTON_TEXT, command=self.copy_to_clipboard)
-        copy_btn.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
+        self.copy_button = ttk.Button(main_frame, text=COPY_BUTTON_TEXT, command=self.copy_to_clipboard)
+        self.copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
     def create_input_fields(self, parent):
         """Create all input fields with labels"""
@@ -249,8 +249,14 @@ class AIPromptGeneratorUI:
         self.output_text.delete(1.0, tk.END)
         self.output_text.insert(1.0, prompt)
 
-        # Show success message
-        messagebox.showinfo("Erfolg", "Prompt erfolgreich generiert!")
+        # Automatically copy to clipboard
+        try:
+            pyperclip.copy(prompt)
+        except Exception:
+            pass  # Silent fail for auto-copy
+
+        # Show visual feedback: green flash for text area
+        self.show_text_area_success()
 
     def copy_to_clipboard(self):
         """Copy the generated prompt to clipboard"""
@@ -264,6 +270,34 @@ class AIPromptGeneratorUI:
 
         try:
             pyperclip.copy(prompt_text)
-            messagebox.showinfo("Erfolg", "Prompt in die Zwischenablage kopiert!")
+            # Show visual feedback: green button flash and checkmark
+            self.show_copy_button_success()
         except Exception as e:
             messagebox.showerror("Fehler", f"Fehler beim Kopieren in die Zwischenablage: {str(e)}")
+
+    def show_text_area_success(self):
+        """Show green flash feedback for successful prompt generation"""
+        # Store original background color
+        original_bg = self.output_text.cget("bg")
+
+        # Set green background
+        self.output_text.configure(bg="lightgreen")
+
+        # Reset to original color after 1.5 seconds
+        self.root.after(1500, lambda: self.output_text.configure(bg=original_bg))
+
+    def show_copy_button_success(self):
+        """Show green flash feedback for successful clipboard copy"""
+        # Store original button properties
+        original_text = self.copy_button.cget("text")
+        original_relief = self.copy_button.cget("relief")
+        original_bg = self.copy_button.cget("background")
+
+        # Set success styling
+        self.copy_button.configure(text="✓ Copy to Clipboard", relief="solid", background="lightgreen")
+
+        # Reset to original styling after 2 seconds
+        def reset_button():
+            self.copy_button.configure(text=original_text, relief=original_relief, background=original_bg)
+
+        self.root.after(2000, reset_button)

@@ -102,8 +102,9 @@ Layoutanforderungen:
 - kindgerechtes, sauberes Layout
 
 AUSGABE:
-Gib direkt die Downloadlinks zu beiden PDF-Dateien aus.
-Keine Zwischenerklärungen oder Teilausgaben.
+Erstelle zwei PDF-Dateien (Übungsblatt & Lösungsblatt) im DIN-A4-Format, Schriftart Arial 12 pt.
+Speichere beide Dateien lokal in dieser Sitzung (im /mnt/data-Verzeichnis) und gib mir direkt die Downloadlinks zu diesen PDFs innerhalb des Chats aus.
+Kein Text ausgeben, nur die beiden Downloadlinks.
 
 ZUSATZ:
 Wenn du zusätzliche Informationen aus der Recherche verwendest (z. B. typische Fehlerquellen oder Aufgabentypen), integriere sie automatisch in die Aufgaben — ohne sie separat aufzuführen."""
