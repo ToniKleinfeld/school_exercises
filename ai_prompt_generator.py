@@ -4,7 +4,7 @@ Main module for AI Prompt Generator
 This module contains the main application logic and coordinates between
 the UI and prompt creation components.
 
-Author: AI Assistant
+Author: Toni Kleinfeld
 Date: October 2025
 """
 
