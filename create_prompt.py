@@ -4,7 +4,7 @@ Prompt Generator Module
 This module handles the creation and formatting of AI prompts for educational exercises.
 It contains the business logic for generating prompts based on user inputs.
 
-Author: AI Assistant
+Author: Toni Kleinfeld
 Date: October 2025
 """
 
@@ -16,50 +16,55 @@ class PromptGenerator:
         """Initialize the prompt generator"""
         pass
 
-    def create_prompt_template(self, num_questions, grade, subject, topic, exercise_types):
+    def create_prompt_template(self, num_questions, grade, subject, main_topic, subtopics, exercise_types):
         """
         Create the formatted prompt template
 
         Args:
-            num_questions (str): Number of questions to generate
+            num_questions (str): Number of questions per exercise type
             grade (str): Grade/class level
             subject (str): Subject area
-            topic (str): Specific topic
+            main_topic (str): Main topic
+            subtopics (str): Subtopics separated by commas
             exercise_types (list): List of exercise types
 
         Returns:
             str: Formatted prompt for AI
         """
+        # Create structured topic text
+        topic_text = self._format_topic_structure(main_topic, subtopics)
+
         # Handle both list and string input for backwards compatibility
         if isinstance(exercise_types, list):
-            # Calculate distribution of exercises
-            total_exercises = int(num_questions)
-            exercises_per_type = total_exercises // len(exercise_types)
-            remaining = total_exercises % len(exercise_types)
+            # Each exercise type gets the specified number of questions
+            total_exercises = int(num_questions) * len(exercise_types)
 
-            # Create distribution text
+            # Create distribution text - each type gets the same number
             distribution_parts = []
-            for i, exercise_type in enumerate(exercise_types):
-                count = exercises_per_type + (1 if i < remaining else 0)
-                distribution_parts.append(f"{count} {exercise_type}")
+            for exercise_type in exercise_types:
+                distribution_parts.append(f"{num_questions} {exercise_type}")
 
             distribution_text = ", ".join(distribution_parts)
+            exercises_info = f"Insgesamt {total_exercises} Aufgaben: {distribution_text}"
         else:
             distribution_text = f"{num_questions} {exercise_types}"
+            exercises_info = distribution_text
 
         # Determine age-appropriate language level
         grade_level = self._get_grade_level(grade)
         language_instruction = self._get_language_instruction(subject, grade_level)
 
-        prompt = f"""Erstelle {num_questions} Übungen für Schüler der {grade} zum Thema „{topic}".
+        prompt = f"""Erstelle Übungen für Schüler der {grade} zum Thema: {topic_text}
 
-Übungstypen: {distribution_text}
+{exercises_info}
 
 {language_instruction}
 
-Für jede Aufgabe: klare, einfache Formulierungen
+Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
 
 Danach: vollständige Lösung und kurze {grade_level} Erklärung
+
+WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des Themas abdecken und zum Nachdenken anregen.
 
 Ausgabeanforderungen:
 
@@ -81,6 +86,22 @@ Keine weiteren Erklärungen oder Zwischenausgaben – direkt PDFs zum Download e
 Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus."""
 
         return prompt
+
+    def _format_topic_structure(self, main_topic, subtopics):
+        """Format the topic structure for better clarity"""
+        if not main_topic.strip():
+            return subtopics.strip() if subtopics.strip() else "Unbekanntes Thema"
+
+        if not subtopics.strip():
+            return main_topic.strip()
+
+        # Clean and format subtopics
+        subtopic_list = [sub.strip() for sub in subtopics.split(",") if sub.strip()]
+        if subtopic_list:
+            subtopic_text = ", ".join(subtopic_list)
+            return f'„{main_topic.strip()}" (Schwerpunkte: {subtopic_text})'
+        else:
+            return f'„{main_topic.strip()}"'
 
     def _get_grade_level(self, grade):
         """Determine appropriate language level based on grade"""
@@ -108,14 +129,15 @@ Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus."""
         else:
             return f"Sprache: Deutsch ({grade_level} Fachsprache für {subject})"
 
-    def validate_inputs(self, grade, subject, topic, exercise_type, num_questions):
+    def validate_inputs(self, grade, subject, main_topic, subtopics, exercise_type, num_questions):
         """
         Validate all input parameters
 
         Args:
             grade (str): Grade/class level
             subject (str): Subject area
-            topic (str): Specific topic
+            main_topic (str): Main topic
+            subtopics (str): Subtopics
             exercise_type (str): Type of exercise
             num_questions (str): Number of questions
 
@@ -126,10 +148,13 @@ Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus."""
         required_fields = [
             (grade.strip(), "Klasse/Jahrgangsstufe"),
             (subject.strip(), "Fach"),
-            (topic.strip(), "Thema"),
             (exercise_type.strip(), "Aufgabentyp"),
             (num_questions.strip(), "Anzahl der Aufgaben"),
         ]
+
+        # At least one topic field must be filled
+        if not main_topic.strip() and not subtopics.strip():
+            return False, "Bitte füllen Sie mindestens das Hauptthema oder die Unterthemen aus."
 
         for value, field_name in required_fields:
             if not value:

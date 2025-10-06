@@ -79,14 +79,14 @@ class AIPromptGeneratorUI:
         generate_btn = ttk.Button(
             main_frame, text=GENERATE_BUTTON_TEXT, command=self.generate_prompt, style="Accent.TButton"
         )
-        generate_btn.grid(row=7, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
+        generate_btn.grid(row=8, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
 
         # Output section
         self.create_output_section(main_frame)
 
         # Copy button - placed after output section
         copy_btn = ttk.Button(main_frame, text=COPY_BUTTON_TEXT, command=self.copy_to_clipboard)
-        copy_btn.grid(row=10, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
+        copy_btn.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
     def create_input_fields(self, parent):
         """Create all input fields with labels"""
@@ -105,30 +105,46 @@ class AIPromptGeneratorUI:
         subject_combo.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
         subject_combo.bind("<<ComboboxSelected>>", self.on_subject_changed)
 
-        # Topic
-        ttk.Label(parent, text="Thema:").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.topic_var = tk.StringVar()
-        topic_entry = ttk.Entry(parent, textvariable=self.topic_var, width=40)
-        topic_entry.grid(row=3, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+        # Topic structure with main topic and subtopics
+        ttk.Label(parent, text="Hauptthema:").grid(row=3, column=0, sticky=tk.W, pady=5)
+        self.main_topic_var = tk.StringVar()
+        main_topic_entry = ttk.Entry(parent, textvariable=self.main_topic_var, width=40)
+        main_topic_entry.grid(row=3, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+
+        # Subtopics
+        ttk.Label(parent, text="Unterthemen:").grid(row=4, column=0, sticky=(tk.W, tk.N), pady=5)
+        self.subtopics_var = tk.StringVar()
+        subtopics_entry = ttk.Entry(parent, textvariable=self.subtopics_var, width=40)
+        subtopics_entry.grid(row=4, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+
+        # Help text for subtopics
+        help_text = ttk.Label(
+            parent,
+            text="(Getrennt durch Kommas)",
+            font=("Arial", 8),
+            foreground="gray",
+        )
+        help_text.grid(row=5, column=1, sticky=tk.W, padx=(10, 0))
 
         # Exercise Types - Multiple selection with checkboxes
         self.create_exercise_type_section(parent)
 
-        # Number of Questions
-        ttk.Label(parent, text="Anzahl der Aufgaben:").grid(row=6, column=0, sticky=tk.W, pady=5)
+        # Number of Questions per Type
+        ttk.Label(parent, text="Aufgaben pro Typ:").grid(row=7, column=0, sticky=tk.W, pady=5)
+        ttk.Label(parent, text="Anzahl der Aufgaben:").grid(row=7, column=0, sticky=tk.W, pady=5)
         self.num_questions_var = tk.StringVar(value=DEFAULT_NUM_QUESTIONS)
         num_spinbox = ttk.Spinbox(
             parent, from_=MIN_QUESTIONS, to=MAX_QUESTIONS, textvariable=self.num_questions_var, width=38
         )
-        num_spinbox.grid(row=6, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+        num_spinbox.grid(row=7, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
 
     def create_exercise_type_section(self, parent):
         """Create exercise type selection with checkboxes"""
-        ttk.Label(parent, text="Aufgabentypen:").grid(row=4, column=0, sticky=(tk.W, tk.N), pady=5)
+        ttk.Label(parent, text="Aufgabentypen:").grid(row=6, column=0, sticky=(tk.W, tk.N), pady=5)
 
         # Frame for checkboxes
         self.exercise_frame = ttk.Frame(parent)
-        self.exercise_frame.grid(row=4, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
+        self.exercise_frame.grid(row=6, column=1, sticky=(tk.W, tk.E), pady=5, padx=(10, 0))
 
         # Dictionary to store checkbox variables
         self.exercise_type_vars = {}
@@ -183,21 +199,22 @@ class AIPromptGeneratorUI:
         """Create the output section with generated prompt display"""
         # Output label
         output_label = ttk.Label(parent, text="Generierter Prompt:", font=LABEL_FONT)
-        output_label.grid(row=8, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
+        output_label.grid(row=9, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
 
         # Output text area with scrollbar
         self.output_text = scrolledtext.ScrolledText(parent, height=8, width=70, wrap=tk.WORD, font=OUTPUT_FONT)
-        self.output_text.grid(row=9, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+        self.output_text.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
 
         # Configure text area to expand
-        parent.rowconfigure(9, weight=1)
+        parent.rowconfigure(10, weight=1)
 
     def generate_prompt(self):
         """Generate the AI prompt based on user inputs"""
         # Get values from input fields
         grade = self.grade_var.get()
         subject = self.subject_var.get()
-        topic = self.topic_var.get()
+        main_topic = self.main_topic_var.get()
+        subtopics = self.subtopics_var.get()
         num_questions = self.num_questions_var.get()
 
         # Get selected exercise types from checkboxes
@@ -211,7 +228,7 @@ class AIPromptGeneratorUI:
 
         # Validate inputs using the prompt generator
         is_valid, error_message = self.prompt_generator.validate_inputs(
-            grade, subject, topic, exercise_types_str, num_questions
+            grade, subject, main_topic, subtopics, exercise_types_str, num_questions
         )
 
         # Additional validation for exercise types
@@ -225,7 +242,7 @@ class AIPromptGeneratorUI:
 
         # Generate the prompt using the prompt generator
         prompt = self.prompt_generator.create_prompt_template(
-            num_questions, grade, subject, topic, selected_exercise_types
+            num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
         )
 
         # Display the prompt in the output area

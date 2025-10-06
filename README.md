@@ -71,13 +71,14 @@ Die Anwendung unterstützt folgende Fächer des deutschen Schulsystems:
 - Oberstufe
 - Universität
 
-## Eingabefelder
+## Eingabefelder (Version 2.1)
 
 1. **Klasse/Jahrgangsstufe**: Wähle die Klassenstufe
 2. **Fach**: Wähle das Schulfach
-3. **Thema**: Gib das spezifische Thema ein
-4. **Aufgabentypen**: Wähle einen oder mehrere passende Aufgabentypen (erscheinen nach Fachauswahl)
-5. **Anzahl der Aufgaben**: Anzahl der gewünschten Aufgaben
+3. **Hauptthema**: Das übergeordnete Thema (z.B. "Nomen")
+4. **Unterthemen**: Spezifische Aspekte, getrennt durch Kommas (z.B. "Merkmale, Veränderung, Merkwörter mit ß")
+5. **Aufgabentypen**: Wähle einen oder mehrere passende Aufgabentypen (erscheinen nach Fachauswahl)
+6. **Anzahl der Aufgaben**: Anzahl der Aufgaben **pro Aufgabentyp** (nicht insgesamt!)
 
 ## Intelligente Aufgabentyp-Zuordnung
 
@@ -88,14 +89,24 @@ Die App zeigt nur sinnvolle Aufgabentypen für das gewählte Fach an:
 - **Fremdsprachen**: Lückentext, Multiple Choice, Aufsatzfragen, etc.
 - **Naturwissenschaften**: Analyseaufgaben, Multiple Choice, Kurze Antworten, etc.
 
-## Neue Prompt-Funktionen (Version 2.0)
+## Neue Features (Version 2.1)
 
-Der generierte Prompt ist jetzt deutlich präziser und kindgerechter:
+### ✅ **Strukturierte Themenangabe**
 
-### ✅ **Intelligente Aufgabenverteilung**
+- **Hauptthema**: Übergeordnetes Thema (z.B. "Nomen", "Quadratische Gleichungen")
+- **Unterthemen**: Spezifische Aspekte, kommagetrennt
+- **Automatische Formatierung**: "Nomen" (Schwerpunkte: Merkmale, Veränderung, Merkwörter mit ß)
 
-- Automatische gleichmäßige Verteilung der Fragen auf gewählte Aufgabentypen
-- Beispiel: 10 Aufgaben → "5 Multiple Choice, 5 Lückentext"
+### ✅ **Korrekte Aufgabenverteilung**
+
+- **Pro Typ**: 10 Aufgaben bedeutet 10 Multiple Choice + 10 Lückentext = 20 Aufgaben insgesamt
+- **Klare Angaben**: "Insgesamt 20 Aufgaben: 10 Multiple Choice, 10 Lückentext"
+
+### ✅ **Tiefgreifende Aufgaben**
+
+- Explizite Aufforderung für "tiefgreifende, durchdachte Aufgaben"
+- Verschiedene Aspekte des Themas abdecken
+- Angemessener Schwierigkeitsgrad
 
 ### ✅ **Altersgerechte Sprache**
 
@@ -115,18 +126,20 @@ Der generierte Prompt ist jetzt deutlich präziser und kindgerechter:
 - Kompletter Wechsel zu deutscher Prompt-Sprache
 - Fachspezifische Sprachangaben je nach Unterrichtsfach
 
-## Beispiel-Output (Version 2.0)
+## Beispiel-Output (Version 2.1)
 
 ```
-Erstelle 10 Übungen für Schüler der 4. Klasse zum Thema „Nomen Merkmale,Verändern sich Merkwörter mit ß".
+Erstelle Übungen für Schüler der 4. Klasse zum Thema: „Nomen" (Schwerpunkte: Merkmale, Veränderung, Merkwörter mit ß)
 
-Übungstypen: 5 Multiple Choice, 5 Lückentext
+Insgesamt 20 Aufgaben: 10 Multiple Choice, 10 Lückentext
 
 Sprache: Deutsch (kindgerechte Niveau für Grundschule)
 
-Für jede Aufgabe: klare, einfache Formulierungen
+Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
 
 Danach: vollständige Lösung und kurze kindgerechte Erklärung
+
+WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des Themas abdecken und zum Nachdenken anregen.
 
 Ausgabeanforderungen:
 
@@ -135,15 +148,7 @@ Erstelle zwei PDF-Dateien:
 1. Übungsblatt (Fragen ohne Lösungen) für Schüler
 2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrkräfte
 
-Verwende übersichtliches Layout (DIN A4, Arial 12 pt)
-
-Trenne Abschnitte mit klaren Überschriften und Abständen
-
-Titel, Name- und Datumsfelder auf Seite 1 des Übungsblatts
-
-Mehrseitiges Layout, falls nötig
-
-Keine weiteren Erklärungen oder Zwischenausgaben – direkt PDFs zum Download erstellen
+[...weitere Layout-Anforderungen...]
 
 Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus.
 ```
