@@ -8,6 +8,8 @@ Author: Toni Kleinfeld
 Date: October 2025
 """
 
+from config import PROMPT_TEMPLATE
+
 
 class PromptGenerator:
     """Class responsible for generating AI prompts based on input parameters"""
@@ -64,48 +66,22 @@ class PromptGenerator:
         # Create exercise type list for research
         exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
 
-        prompt = f"""SCHRITT 1: RECHERCHE & INTEGRATION (nicht separat ausgeben)
+        # Prepare subtopic instructions
+        subtopic_instructions = self._create_subtopic_instructions(
+            subtopic_list, exercises_per_subtopic if subtopic_list else int(num_questions), exercise_types
+        )
 
-Recherchiere im Internet nach existierenden Aufgaben zu: {topic_text}
-(Klassenstufe: {grade}, Fach: {subject}, Aufgabentypen: {exercise_types_text})
-
-→ Verwende die gefundenen Informationen direkt zur Erstellung eigener, inspiriert-abgewandelter Aufgaben.
-→ Gib die Rechercheergebnisse nicht separat aus, sondern arbeite sie vollständig in die Aufgaben ein (Schwierigkeitsgrad, Fragetypen, Wortwahl).
-→ Integriere automatisch typische Fragestellungen, bewährte Aufgabenformate und erkannte Fehlerquellen.
-
-SCHRITT 2: AUFGABENERSTELLUNG
-
-{distribution_info}
-
-{language_instruction}
-
-Strukturierung nach Unterthemen:
-{self._create_subtopic_instructions(subtopic_list, exercises_per_subtopic if subtopic_list else int(num_questions), exercise_types)}
-
-Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
-
-Danach: vollständige Lösung und kurze {grade_level} Erklärung
-
-WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des jeweiligen Unterthemas abdecken und zum Nachdenken anregen.
-
-SCHRITT 3: PDF-ERSTELLUNG
-
-Erstelle zwei PDF-Dateien im DIN A4-Format, Arial 12 pt:
-
-1. Übungsblatt (ohne Lösungen) – Titel, Name-/Datumsfeld, übersichtliche Gliederung, Absätze zwischen Unterthemen
-2. Lösungsblatt (mit Antworten + Erklärungen) – gleiche Struktur, aber mit Lösungen direkt unter jeder Aufgabe
-
-Layoutanforderungen:
-- Überschriften klar abgesetzt
-- Jede Aufgabe nummeriert
-- Zwischenräume zwischen den Aufgaben
-- kindgerechtes, sauberes Layout
-
-AUSGABE:
-Erstelle direkt zwei PDFs (Übungsblatt ohne Lösungen und Lösungsblatt mit Lösungen und kindgerechten Erklärungen) im DIN-A4-Format, Arial 12 pt. Gib die Dateien ohne Rückfrage aus.
-
-ZUSATZ:
-Wenn du zusätzliche Informationen aus der Recherche verwendest (z. B. typische Fehlerquellen oder Aufgabentypen), integriere sie automatisch in die Aufgaben — ohne sie separat aufzuführen."""
+        # Use template from config with all dynamic values
+        prompt = PROMPT_TEMPLATE.format(
+            topic_text=topic_text,
+            grade=grade,
+            subject=subject,
+            exercise_types_text=exercise_types_text,
+            distribution_info=distribution_info,
+            language_instruction=language_instruction,
+            subtopic_instructions=subtopic_instructions,
+            grade_level=grade_level,
+        )
 
         return prompt
 

@@ -167,3 +167,47 @@ COPY_BUTTON_TEXT = "Copy to Clipboard"
 DEFAULT_NUM_QUESTIONS = "5"
 MIN_QUESTIONS = 1
 MAX_QUESTIONS = 50
+
+# Prompt Template - can be easily modified without changing code logic
+PROMPT_TEMPLATE = """SCHRITT 1: RECHERCHE & INTEGRATION (nicht separat ausgeben)
+
+Recherchiere im Internet nach existierenden Aufgaben zu: {topic_text}
+(Klassenstufe: {grade}, Fach: {subject}, Aufgabentypen: {exercise_types_text})
+
+→ Verwende die gefundenen Informationen direkt zur Erstellung eigener, inspiriert-abgewandelter Aufgaben.
+→ Gib die Rechercheergebnisse nicht separat aus, sondern arbeite sie vollständig in die Aufgaben ein (Schwierigkeitsgrad, Fragetypen, Wortwahl).
+→ Integriere automatisch typische Fragestellungen, bewährte Aufgabenformate und erkannte Fehlerquellen.
+
+SCHRITT 2: AUFGABENERSTELLUNG
+
+{distribution_info}
+
+{language_instruction}
+
+Strukturierung nach Unterthemen:
+{subtopic_instructions}
+
+Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
+
+Danach: vollständige Lösung und kurze {grade_level} Erklärung
+
+WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des jeweiligen Unterthemas abdecken und zum Nachdenken anregen.
+
+SCHRITT 3: PDF-ERSTELLUNG
+
+Erstelle zwei PDF-Dateien im DIN A4-Format, Arial 12 pt:
+
+1. Übungsblatt (ohne Lösungen) – Titel, Name-/Datumsfeld, übersichtliche Gliederung, Absätze zwischen Unterthemen
+2. Lösungsblatt (mit Antworten + Erklärungen) – gleiche Struktur, aber mit Lösungen direkt unter jeder Aufgabe
+
+Layoutanforderungen:
+- Überschriften klar abgesetzt
+- Jede Aufgabe nummeriert
+- Zwischenräume zwischen den Aufgaben
+- kindgerechtes, sauberes Layout
+
+AUSGABE:
+Erstelle direkt zwei PDFs (Übungsblatt ohne Lösungen und Lösungsblatt mit Lösungen und kindgerechten Erklärungen) im DIN-A4-Format, Arial 12 pt. Gib die Dateien ohne Rückfrage aus.
+
+ZUSATZ:
+Wenn du zusätzliche Informationen aus der Recherche verwendest (z. B. typische Fehlerquellen oder Aufgabentypen), integriere sie automatisch in die Aufgaben — ohne sie separat aufzuführen."""
