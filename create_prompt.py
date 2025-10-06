@@ -32,26 +32,81 @@ class PromptGenerator:
         """
         # Handle both list and string input for backwards compatibility
         if isinstance(exercise_types, list):
-            if len(exercise_types) == 1:
-                exercise_types_text = exercise_types[0]
-            else:
-                exercise_types_text = ", ".join(exercise_types[:-1]) + " und " + exercise_types[-1]
+            # Calculate distribution of exercises
+            total_exercises = int(num_questions)
+            exercises_per_type = total_exercises // len(exercise_types)
+            remaining = total_exercises % len(exercise_types)
+
+            # Create distribution text
+            distribution_parts = []
+            for i, exercise_type in enumerate(exercise_types):
+                count = exercises_per_type + (1 if i < remaining else 0)
+                distribution_parts.append(f"{count} {exercise_type}")
+
+            distribution_text = ", ".join(distribution_parts)
         else:
-            exercise_types_text = exercise_types
+            distribution_text = f"{num_questions} {exercise_types}"
 
-        prompt = f"""Generate {num_questions} exercises for {grade} students in {subject} on the topic "{topic}".
-The exercises should include the following types: {exercise_types_text}.
-Distribute the questions evenly across the selected exercise types.
-Include detailed answers and explanations for each question.
+        # Determine age-appropriate language level
+        grade_level = self._get_grade_level(grade)
+        language_instruction = self._get_language_instruction(subject, grade_level)
 
-Output requirements:
-- Create two separate PDFs:
-  1. Exercise sheet (questions only) - multi-page format suitable for students
-  2. Answer sheet (questions with solutions and explanations) - for teachers
+        prompt = f"""Erstelle {num_questions} Übungen für Schüler der {grade} zum Thema „{topic}".
 
-Format the response as structured text that can be easily converted to PDF format."""
+Übungstypen: {distribution_text}
+
+{language_instruction}
+
+Für jede Aufgabe: klare, einfache Formulierungen
+
+Danach: vollständige Lösung und kurze {grade_level} Erklärung
+
+Ausgabeanforderungen:
+
+Erstelle zwei PDF-Dateien:
+
+1. Übungsblatt (Fragen ohne Lösungen) für Schüler
+2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrkräfte
+
+Verwende übersichtliches Layout (DIN A4, Arial 12 pt)
+
+Trenne Abschnitte mit klaren Überschriften und Abständen
+
+Titel, Name- und Datumsfelder auf Seite 1 des Übungsblatts
+
+Mehrseitiges Layout, falls nötig
+
+Keine weiteren Erklärungen oder Zwischenausgaben – direkt PDFs zum Download erstellen
+
+Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus."""
 
         return prompt
+
+    def _get_grade_level(self, grade):
+        """Determine appropriate language level based on grade"""
+        grade_lower = grade.lower()
+        if any(x in grade_lower for x in ["1.", "2.", "3.", "4."]):
+            return "kindgerechte"
+        elif any(x in grade_lower for x in ["5.", "6.", "7.", "8."]):
+            return "altersgerechte"
+        elif any(x in grade_lower for x in ["9.", "10.", "11.", "12.", "13.", "oberstufe"]):
+            return "angemessene"
+        else:
+            return "verständliche"
+
+    def _get_language_instruction(self, subject, grade_level):
+        """Get subject-specific language instructions"""
+        subject_lower = subject.lower()
+
+        if "deutsch" in subject_lower:
+            if grade_level == "kindgerechte":
+                return f"Sprache: Deutsch ({grade_level} Niveau für Grundschule)"
+            else:
+                return f"Sprache: Deutsch ({grade_level} Niveau)"
+        elif any(lang in subject_lower for lang in ["englisch", "französisch", "spanisch", "latein"]):
+            return f"Sprache: {subject} ({grade_level} Sprachniveau)"
+        else:
+            return f"Sprache: Deutsch ({grade_level} Fachsprache für {subject})"
 
     def validate_inputs(self, grade, subject, topic, exercise_type, num_questions):
         """

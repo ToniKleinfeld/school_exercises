@@ -88,23 +88,64 @@ Die App zeigt nur sinnvolle Aufgabentypen für das gewählte Fach an:
 - **Fremdsprachen**: Lückentext, Multiple Choice, Aufsatzfragen, etc.
 - **Naturwissenschaften**: Analyseaufgaben, Multiple Choice, Kurze Antworten, etc.
 
-## Neue Prompt-Funktionen
+## Neue Prompt-Funktionen (Version 2.0)
 
-Der generierte Prompt fordert jetzt an:
+Der generierte Prompt ist jetzt deutlich präziser und kindgerechter:
 
-- Mehrere Aufgabentypen gleichzeitig
-- Gleichmäßige Verteilung der Fragen
-- **Zwei separate PDF-Dateien**:
-  1. Aufgabenblatt (nur Fragen) für Schüler
-  2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrer
+### ✅ **Intelligente Aufgabenverteilung**
 
-## Beispiel-Output
+- Automatische gleichmäßige Verteilung der Fragen auf gewählte Aufgabentypen
+- Beispiel: 10 Aufgaben → "5 Multiple Choice, 5 Lückentext"
+
+### ✅ **Altersgerechte Sprache**
+
+- **Grundschule (1.-4. Klasse)**: Kindgerechte Formulierungen
+- **Mittelstufe (5.-8. Klasse)**: Altersgerechte Sprache
+- **Oberstufe (9.-13. Klasse)**: Angemessene Fachsprache
+
+### ✅ **Professionelle PDF-Anforderungen**
+
+- Klare Layout-Vorgaben (DIN A4, Arial 12pt)
+- Name- und Datumsfelder auf Übungsblatt
+- Direkte PDF-Download-Links
+- Mehrseitiges Layout bei Bedarf
+
+### ✅ **Deutsche Prompts**
+
+- Kompletter Wechsel zu deutscher Prompt-Sprache
+- Fachspezifische Sprachangaben je nach Unterrichtsfach
+
+## Beispiel-Output (Version 2.0)
 
 ```
-Generate 5 exercises for 10. Klasse grade students in Mathematik on the topic "Quadratische Gleichungen".
-The exercises should be of type Multiple Choice.
-Include answers and short explanations.
-Format the output in JSON.
+Erstelle 10 Übungen für Schüler der 4. Klasse zum Thema „Nomen Merkmale,Verändern sich Merkwörter mit ß".
+
+Übungstypen: 5 Multiple Choice, 5 Lückentext
+
+Sprache: Deutsch (kindgerechte Niveau für Grundschule)
+
+Für jede Aufgabe: klare, einfache Formulierungen
+
+Danach: vollständige Lösung und kurze kindgerechte Erklärung
+
+Ausgabeanforderungen:
+
+Erstelle zwei PDF-Dateien:
+
+1. Übungsblatt (Fragen ohne Lösungen) für Schüler
+2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrkräfte
+
+Verwende übersichtliches Layout (DIN A4, Arial 12 pt)
+
+Trenne Abschnitte mit klaren Überschriften und Abständen
+
+Titel, Name- und Datumsfelder auf Seite 1 des Übungsblatts
+
+Mehrseitiges Layout, falls nötig
+
+Keine weiteren Erklärungen oder Zwischenausgaben – direkt PDFs zum Download erstellen
+
+Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus.
 ```
 
 ## Erweiterbarkeit
