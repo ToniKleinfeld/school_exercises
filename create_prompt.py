@@ -64,17 +64,14 @@ class PromptGenerator:
         # Create exercise type list for research
         exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
 
-        prompt = f"""SCHRITT 1: RECHERCHE UND INSPIRATION
+        prompt = f"""SCHRITT 1: RECHERCHE & INTEGRATION (nicht separat ausgeben)
 
-Suche zuerst im Internet nach vergleichbaren Aufgaben für das Thema: {topic_text}
-Klassenstufe: {grade}, Fach: {subject}
-Aufgabentypen: {exercise_types_text}
+Recherchiere im Internet nach existierenden Aufgaben zu: {topic_text}
+(Klassenstufe: {grade}, Fach: {subject}, Aufgabentypen: {exercise_types_text})
 
-Orientiere dich an existierenden Beispielen, um:
-- Typische Fragestellungen zu verstehen
-- Angemessenen Schwierigkeitsgrad zu erkennen  
-- Bewährte Aufgabenformate zu übernehmen
-- Häufige Fehlerquellen zu identifizieren
+→ Verwende die gefundenen Informationen direkt zur Erstellung eigener, inspiriert-abgewandelter Aufgaben.
+→ Gib die Rechercheergebnisse nicht separat aus, sondern arbeite sie vollständig in die Aufgaben ein (Schwierigkeitsgrad, Fragetypen, Wortwahl).
+→ Integriere automatisch typische Fragestellungen, bewährte Aufgabenformate und erkannte Fehlerquellen.
 
 SCHRITT 2: AUFGABENERSTELLUNG
 
@@ -93,22 +90,23 @@ WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte d
 
 SCHRITT 3: PDF-ERSTELLUNG
 
-Erstelle zwei PDF-Dateien:
+Erstelle zwei PDF-Dateien im DIN A4-Format, Arial 12 pt:
 
-1. Übungsblatt (Fragen ohne Lösungen) für Schüler
-2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrkräfte
+1. Übungsblatt (ohne Lösungen) – Titel, Name-/Datumsfeld, übersichtliche Gliederung, Absätze zwischen Unterthemen
+2. Lösungsblatt (mit Antworten + Erklärungen) – gleiche Struktur, aber mit Lösungen direkt unter jeder Aufgabe
 
-Verwende übersichtliches Layout (DIN A4, Arial 12 pt)
+Layoutanforderungen:
+- Überschriften klar abgesetzt
+- Jede Aufgabe nummeriert
+- Zwischenräume zwischen den Aufgaben
+- kindgerechtes, sauberes Layout
 
-Trenne Abschnitte mit klaren Überschriften und Abständen
+AUSGABE:
+Gib direkt die Downloadlinks zu beiden PDF-Dateien aus.
+Keine Zwischenerklärungen oder Teilausgaben.
 
-Titel, Name- und Datumsfelder auf Seite 1 des Übungsblatts
-
-Mehrseitiges Layout, falls nötig
-
-Keine weiteren Erklärungen oder Zwischenausgaben – direkt PDFs zum Download erstellen
-
-Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus."""
+ZUSATZ:
+Wenn du zusätzliche Informationen aus der Recherche verwendest (z. B. typische Fehlerquellen oder Aufgabentypen), integriere sie automatisch in die Aufgaben — ohne sie separat aufzuführen."""
 
         return prompt
 
