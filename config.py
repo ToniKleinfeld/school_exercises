@@ -153,7 +153,7 @@ DEFAULT_EXERCISE_TYPES = ["Multiple Choice", "Offene Fragen", "Kurze Antworten"]
 # UI Configuration
 WINDOW_TITLE = "KI Prompt Generator für Übungsaufgaben zum Lernen"
 MAIN_TITLE = "Übungsaufgaben Prompt Generator"
-WINDOW_SIZE = "700x600"
+WINDOW_SIZE = "600x900"
 MAIN_FONT = ("Arial", 18, "bold")
 LABEL_FONT = ("Arial", 12, "bold")
 HELP_FONT = ("Arial", 9)

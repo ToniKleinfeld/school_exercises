@@ -31,42 +31,67 @@ class PromptGenerator:
         Returns:
             str: Formatted prompt for AI
         """
-        # Create structured topic text
-        topic_text = self._format_topic_structure(main_topic, subtopics)
+        # Create structured topic text and subtopic analysis
+        topic_text, subtopic_list = self._format_topic_structure_with_list(main_topic, subtopics)
 
         # Handle both list and string input for backwards compatibility
-        if isinstance(exercise_types, list):
-            # Each exercise type gets the specified number of questions
-            total_exercises = int(num_questions) * len(exercise_types)
+        if isinstance(exercise_types, list) and subtopic_list:
+            # Calculate exercises per subtopic
+            exercises_per_subtopic = int(num_questions)
+            total_exercises = exercises_per_subtopic * len(subtopic_list)
 
-            # Create distribution text - each type gets the same number
-            distribution_parts = []
-            for exercise_type in exercise_types:
-                distribution_parts.append(f"{num_questions} {exercise_type}")
-
-            distribution_text = ", ".join(distribution_parts)
-            exercises_info = f"Insgesamt {total_exercises} Aufgaben: {distribution_text}"
+            # Create distribution text based on subtopics
+            distribution_info = self._create_subtopic_distribution(
+                subtopic_list, exercises_per_subtopic, exercise_types
+            )
         else:
-            distribution_text = f"{num_questions} {exercise_types}"
-            exercises_info = distribution_text
+            # Fallback for old behavior
+            if isinstance(exercise_types, list):
+                total_exercises = int(num_questions) * len(exercise_types)
+                distribution_parts = []
+                for exercise_type in exercise_types:
+                    distribution_parts.append(f"{num_questions} {exercise_type}")
+                distribution_text = ", ".join(distribution_parts)
+                distribution_info = f"Insgesamt {total_exercises} Aufgaben: {distribution_text}"
+            else:
+                distribution_info = f"{num_questions} {exercise_types}"
+                total_exercises = int(num_questions)
 
         # Determine age-appropriate language level
         grade_level = self._get_grade_level(grade)
         language_instruction = self._get_language_instruction(subject, grade_level)
 
-        prompt = f"""Erstelle Übungen für Schüler der {grade} zum Thema: {topic_text}
+        # Create exercise type list for research
+        exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
 
-{exercises_info}
+        prompt = f"""SCHRITT 1: RECHERCHE UND INSPIRATION
+
+Suche zuerst im Internet nach vergleichbaren Aufgaben für das Thema: {topic_text}
+Klassenstufe: {grade}, Fach: {subject}
+Aufgabentypen: {exercise_types_text}
+
+Orientiere dich an existierenden Beispielen, um:
+- Typische Fragestellungen zu verstehen
+- Angemessenen Schwierigkeitsgrad zu erkennen  
+- Bewährte Aufgabenformate zu übernehmen
+- Häufige Fehlerquellen zu identifizieren
+
+SCHRITT 2: AUFGABENERSTELLUNG
+
+{distribution_info}
 
 {language_instruction}
+
+Strukturierung nach Unterthemen:
+{self._create_subtopic_instructions(subtopic_list, exercises_per_subtopic if subtopic_list else int(num_questions), exercise_types)}
 
 Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
 
 Danach: vollständige Lösung und kurze {grade_level} Erklärung
 
-WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des Themas abdecken und zum Nachdenken anregen.
+WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des jeweiligen Unterthemas abdecken und zum Nachdenken anregen.
 
-Ausgabeanforderungen:
+SCHRITT 3: PDF-ERSTELLUNG
 
 Erstelle zwei PDF-Dateien:
 
@@ -87,21 +112,61 @@ Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus."""
 
         return prompt
 
-    def _format_topic_structure(self, main_topic, subtopics):
-        """Format the topic structure for better clarity"""
+    def _format_topic_structure_with_list(self, main_topic, subtopics):
+        """Format the topic structure and return both formatted text and subtopic list"""
         if not main_topic.strip():
-            return subtopics.strip() if subtopics.strip() else "Unbekanntes Thema"
+            if subtopics.strip():
+                subtopic_list = [sub.strip() for sub in subtopics.split(",") if sub.strip()]
+                return subtopics.strip(), subtopic_list
+            else:
+                return "Unbekanntes Thema", []
 
         if not subtopics.strip():
-            return main_topic.strip()
+            return f'„{main_topic.strip()}"', []
 
         # Clean and format subtopics
         subtopic_list = [sub.strip() for sub in subtopics.split(",") if sub.strip()]
         if subtopic_list:
             subtopic_text = ", ".join(subtopic_list)
-            return f'„{main_topic.strip()}" (Schwerpunkte: {subtopic_text})'
+            formatted_topic = f'„{main_topic.strip()}" (Schwerpunkte: {subtopic_text})'
+            return formatted_topic, subtopic_list
         else:
-            return f'„{main_topic.strip()}"'
+            return f'„{main_topic.strip()}"', []
+
+    def _create_subtopic_distribution(self, subtopic_list, exercises_per_subtopic, exercise_types):
+        """Create distribution text based on subtopics"""
+        total_exercises = exercises_per_subtopic * len(subtopic_list)
+
+        distribution_text = f"Insgesamt {total_exercises} Aufgaben ({exercises_per_subtopic} pro Unterthema):"
+
+        for i, subtopic in enumerate(subtopic_list, 1):
+            distribution_text += f"\n- Unterthema {i} ({subtopic}): {exercises_per_subtopic} Aufgaben"
+
+        exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
+        distribution_text += f"\n\nAufgabentypen: {exercise_types_text} (zufällig auf Unterthemen verteilt)"
+
+        return distribution_text
+
+    def _create_subtopic_instructions(self, subtopic_list, exercises_per_subtopic, exercise_types):
+        """Create detailed instructions for subtopic-based exercise creation"""
+        if not subtopic_list:
+            return "Erstelle die Aufgaben thematisch strukturiert."
+
+        instructions = []
+        exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
+
+        for i, subtopic in enumerate(subtopic_list, 1):
+            instructions.append(f"Unterthema {i}: '{subtopic}' - {exercises_per_subtopic} Aufgaben")
+            instructions.append(f"   → Verwende zufällig die Aufgabentypen: {exercise_types_text}")
+            instructions.append(f"   → Fokussiere spezifisch auf die Aspekte von '{subtopic}'")
+            instructions.append("")
+
+        return "\n".join(instructions)
+
+    def _format_topic_structure(self, main_topic, subtopics):
+        """Format the topic structure for better clarity (legacy method)"""
+        formatted_topic, _ = self._format_topic_structure_with_list(main_topic, subtopics)
+        return formatted_topic
 
     def _get_grade_level(self, grade):
         """Determine appropriate language level based on grade"""

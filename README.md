@@ -71,14 +71,14 @@ Die Anwendung unterstützt folgende Fächer des deutschen Schulsystems:
 - Oberstufe
 - Universität
 
-## Eingabefelder (Version 2.1)
+## Eingabefelder (Version 2.2)
 
 1. **Klasse/Jahrgangsstufe**: Wähle die Klassenstufe
 2. **Fach**: Wähle das Schulfach
 3. **Hauptthema**: Das übergeordnete Thema (z.B. "Nomen")
 4. **Unterthemen**: Spezifische Aspekte, getrennt durch Kommas (z.B. "Merkmale, Veränderung, Merkwörter mit ß")
 5. **Aufgabentypen**: Wähle einen oder mehrere passende Aufgabentypen (erscheinen nach Fachauswahl)
-6. **Anzahl der Aufgaben**: Anzahl der Aufgaben **pro Aufgabentyp** (nicht insgesamt!)
+6. **Anzahl der Aufgaben**: Anzahl der Aufgaben **pro Unterthema** (wird zufällig auf Aufgabentypen verteilt)
 
 ## Intelligente Aufgabentyp-Zuordnung
 
@@ -89,24 +89,32 @@ Die App zeigt nur sinnvolle Aufgabentypen für das gewählte Fach an:
 - **Fremdsprachen**: Lückentext, Multiple Choice, Aufsatzfragen, etc.
 - **Naturwissenschaften**: Analyseaufgaben, Multiple Choice, Kurze Antworten, etc.
 
-## Neue Features (Version 2.1)
+## Neue Features (Version 2.2)
+
+### ✅ **Unterthema-basierte Aufgabenverteilung**
+
+- **Pro Unterthema**: 10 Aufgaben bedeutet 10 Aufgaben für "Merkmale" + 10 für "Veränderung" + 10 für "Merkwörter mit ß"
+- **Zufällige Verteilung**: Aufgabentypen werden zufällig auf Unterthemen verteilt
+- **Fokussierte Inhalte**: Jede Aufgabe konzentriert sich spezifisch auf ihr Unterthema
+
+### ✅ **Internet-Recherche für bessere Qualität**
+
+- **Schritt 1**: KI sucht zuerst nach vergleichbaren Aufgaben im Internet
+- **Inspiration**: Orientierung an bewährten Beispielen und Formaten
+- **Qualitätssteigerung**: Erkennung von angemessenem Schwierigkeitsgrad
+- **Fehlerprävention**: Identifikation häufiger Fehlerquellen
+
+### ✅ **Strukturierte 3-Schritt-Anweisung**
+
+- **Schritt 1**: Recherche und Inspiration
+- **Schritt 2**: Aufgabenerstellung pro Unterthema
+- **Schritt 3**: PDF-Erstellung mit Layout
 
 ### ✅ **Strukturierte Themenangabe**
 
 - **Hauptthema**: Übergeordnetes Thema (z.B. "Nomen", "Quadratische Gleichungen")
 - **Unterthemen**: Spezifische Aspekte, kommagetrennt
 - **Automatische Formatierung**: "Nomen" (Schwerpunkte: Merkmale, Veränderung, Merkwörter mit ß)
-
-### ✅ **Korrekte Aufgabenverteilung**
-
-- **Pro Typ**: 10 Aufgaben bedeutet 10 Multiple Choice + 10 Lückentext = 20 Aufgaben insgesamt
-- **Klare Angaben**: "Insgesamt 20 Aufgaben: 10 Multiple Choice, 10 Lückentext"
-
-### ✅ **Tiefgreifende Aufgaben**
-
-- Explizite Aufforderung für "tiefgreifende, durchdachte Aufgaben"
-- Verschiedene Aspekte des Themas abdecken
-- Angemessener Schwierigkeitsgrad
 
 ### ✅ **Altersgerechte Sprache**
 
@@ -126,31 +134,47 @@ Die App zeigt nur sinnvolle Aufgabentypen für das gewählte Fach an:
 - Kompletter Wechsel zu deutscher Prompt-Sprache
 - Fachspezifische Sprachangaben je nach Unterrichtsfach
 
-## Beispiel-Output (Version 2.1)
+## Beispiel-Output (Version 2.2)
 
 ```
-Erstelle Übungen für Schüler der 4. Klasse zum Thema: „Nomen" (Schwerpunkte: Merkmale, Veränderung, Merkwörter mit ß)
+SCHRITT 1: RECHERCHE UND INSPIRATION
 
-Insgesamt 20 Aufgaben: 10 Multiple Choice, 10 Lückentext
+Suche zuerst im Internet nach vergleichbaren Aufgaben für das Thema: „Nomen" (Schwerpunkte: Merkmale, Veränderung, Merkwörter mit ß)
+Klassenstufe: 4. Klasse, Fach: Deutsch
+Aufgabentypen: Multiple Choice, Lückentext
 
-Sprache: Deutsch (kindgerechte Niveau für Grundschule)
+Orientiere dich an existierenden Beispielen, um:
+- Typische Fragestellungen zu verstehen
+- Angemessenen Schwierigkeitsgrad zu erkennen
+- Bewährte Aufgabenformate zu übernehmen
+- Häufige Fehlerquellen zu identifizieren
 
-Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
+SCHRITT 2: AUFGABENERSTELLUNG
 
-Danach: vollständige Lösung und kurze kindgerechte Erklärung
+Insgesamt 30 Aufgaben (10 pro Unterthema):
+- Unterthema 1 (Merkmale): 10 Aufgaben
+- Unterthema 2 (Veränderung): 10 Aufgaben
+- Unterthema 3 (Merkwörter mit ß): 10 Aufgaben
 
-WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des Themas abdecken und zum Nachdenken anregen.
+Aufgabentypen: Multiple Choice, Lückentext (zufällig auf Unterthemen verteilt)
 
-Ausgabeanforderungen:
+Strukturierung nach Unterthemen:
+Unterthema 1: 'Merkmale' - 10 Aufgaben
+   → Verwende zufällig die Aufgabentypen: Multiple Choice, Lückentext
+   → Fokussiere spezifisch auf die Aspekte von 'Merkmale'
 
-Erstelle zwei PDF-Dateien:
+Unterthema 2: 'Veränderung' - 10 Aufgaben
+   → Verwende zufällig die Aufgabentypen: Multiple Choice, Lückentext
+   → Fokussiere spezifisch auf die Aspekte von 'Veränderung'
 
-1. Übungsblatt (Fragen ohne Lösungen) für Schüler
-2. Lösungsblatt (mit Antworten und Erklärungen) für Lehrkräfte
+Unterthema 3: 'Merkwörter mit ß' - 10 Aufgaben
+   → Verwende zufällig die Aufgabentypen: Multiple Choice, Lückentext
+   → Fokussiere spezifisch auf die Aspekte von 'Merkwörter mit ß'
 
-[...weitere Layout-Anforderungen...]
+WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des jeweiligen Unterthemas abdecken und zum Nachdenken anregen.
 
-Formatierungshinweis: Gib beide Dateien direkt als Downloadlink aus.
+SCHRITT 3: PDF-ERSTELLUNG
+[...Layout-Anforderungen...]
 ```
 
 ## Erweiterbarkeit
