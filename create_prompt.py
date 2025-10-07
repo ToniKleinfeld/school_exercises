@@ -8,7 +8,7 @@ Author: Toni Kleinfeld
 Date: October 2025
 """
 
-from config import PROMPT_TEMPLATE
+from config import PROMPT_TEMPLATE, EXERCISE_TYPE_DESCRIPTIONS
 
 
 class PromptGenerator:
@@ -63,10 +63,10 @@ class PromptGenerator:
         grade_level = self._get_grade_level(grade)
         language_instruction = self._get_language_instruction(subject, grade_level)
 
-        # Create exercise type list for research
-        exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
+        # Create exercise type list with detailed descriptions
+        exercise_type_details = self._format_exercise_type_details(exercise_types)
 
-        # Prepare subtopic instructions
+        # Prepare subtopic instructions (now called "Übungsaufgaben")
         subtopic_instructions = self._create_subtopic_instructions(
             subtopic_list, exercises_per_subtopic if subtopic_list else int(num_questions), exercise_types
         )
@@ -76,7 +76,7 @@ class PromptGenerator:
             topic_text=topic_text,
             grade=grade,
             subject=subject,
-            exercise_types_text=exercise_types_text,
+            exercise_type_details=exercise_type_details,
             distribution_info=distribution_info,
             language_instruction=language_instruction,
             subtopic_instructions=subtopic_instructions,
@@ -84,6 +84,20 @@ class PromptGenerator:
         )
 
         return prompt
+
+    def _format_exercise_type_details(self, exercise_types):
+        """Format exercise types with their detailed descriptions"""
+        if not isinstance(exercise_types, list):
+            return exercise_types
+
+        details = []
+        for ex_type in exercise_types:
+            if ex_type in EXERCISE_TYPE_DESCRIPTIONS:
+                details.append(f"• {ex_type}: {EXERCISE_TYPE_DESCRIPTIONS[ex_type]}")
+            else:
+                details.append(f"• {ex_type}")
+
+        return "\n".join(details)
 
     def _format_topic_structure_with_list(self, main_topic, subtopics):
         """Format the topic structure and return both formatted text and subtopic list"""
@@ -110,13 +124,10 @@ class PromptGenerator:
         """Create distribution text based on subtopics"""
         total_exercises = exercises_per_subtopic * len(subtopic_list)
 
-        distribution_text = f"Insgesamt {total_exercises} Aufgaben ({exercises_per_subtopic} pro Unterthema):"
+        distribution_text = f"Insgesamt {total_exercises} Aufgaben ({exercises_per_subtopic} pro Übungsbereich):"
 
         for i, subtopic in enumerate(subtopic_list, 1):
-            distribution_text += f"\n- Unterthema {i} ({subtopic}): {exercises_per_subtopic} Aufgaben"
-
-        exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
-        distribution_text += f"\n\nAufgabentypen: {exercise_types_text} (zufällig auf Unterthemen verteilt)"
+            distribution_text += f"\n\nÜbungsbereich {i}: {subtopic} – {exercises_per_subtopic} Aufgaben"
 
         return distribution_text
 
@@ -126,12 +137,12 @@ class PromptGenerator:
             return "Erstelle die Aufgaben thematisch strukturiert."
 
         instructions = []
-        exercise_types_text = ", ".join(exercise_types) if isinstance(exercise_types, list) else exercise_types
 
         for i, subtopic in enumerate(subtopic_list, 1):
-            instructions.append(f"Unterthema {i}: '{subtopic}' - {exercises_per_subtopic} Aufgaben")
-            instructions.append(f"   → Verwende zufällig die Aufgabentypen: {exercise_types_text}")
+            instructions.append(f"Übungsbereich {i}: {subtopic}")
+            instructions.append(f"   → {exercises_per_subtopic} abwechslungsreiche Aufgaben")
             instructions.append(f"   → Fokussiere spezifisch auf die Aspekte von '{subtopic}'")
+            instructions.append("   → Verwende verschiedene der oben genannten Aufgabentypen")
             instructions.append("")
 
         return "\n".join(instructions)

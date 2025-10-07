@@ -27,7 +27,7 @@ GRADES = (
     "Universität",
 )
 
-# German school subjects
+# German school subjects (focused on core subjects)
 SUBJECTS = (
     "Mathematik",
     "Deutsch",
@@ -35,120 +35,88 @@ SUBJECTS = (
     "Französisch",
     "Spanisch",
     "Latein",
-    "Physik",
-    "Chemie",
-    "Biologie",
-    "Geschichte",
-    "Geographie",
-    "Politik/Wirtschaft",
-    "Sozialwissenschaften",
-    "Religion",
-    "Ethik",
-    "Philosophie",
-    "Kunst",
-    "Musik",
-    "Sport",
-    "Informatik",
-    "Technik",
-    "Wirtschaft",
 )
 
-# Exercise type mappings for each subject
-# Only includes sensible combinations based on pedagogical considerations
+# Exercise type mappings for each subject with detailed descriptions
+# Each type includes pedagogical guidance for better task generation
 EXERCISE_MAPPINGS = {
-    "Mathematik": ["Multiple Choice", "Rechenaufgaben", "Problemlösung", "Kurze Antworten", "Analyseaufgaben"],
+    "Mathematik": [
+        "Rechenaufgaben",
+        "Ankreuzen (Multiple Choice)",
+        "Problemlösung",
+        "Kurzantwort",
+    ],
     "Deutsch": [
-        "Multiple Choice",
-        "Offene Fragen",
-        "Lückentext",
-        "Aufsatzfragen",
-        "Interpretationsaufgaben",
-        "Erörterung",
-        "Analyseaufgaben",
+        "Erkennen/Unterstreichen",
+        "Ankreuzen (Multiple Choice)",
+        "Lückentext (Wort einsetzen)",
+        "Lückentext (Form ergänzen)",
+        "Formbildung/Variation",
+        "Groß-/Kleinschreibung korrigieren",
+        "Wortart unterscheiden/Ausschließen",
+        "Sortieren/Zuordnen",
+        "Freies Vervollständigen",
+        "Kurzantwort: Bestimme Eigenschaften",
     ],
     "Englisch": [
-        "Multiple Choice",
-        "Lückentext",
-        "Kurze Antworten",
-        "Aufsatzfragen",
-        "Offene Fragen",
-        "Richtig/Falsch",
+        "Erkennen/Unterstreichen",
+        "Ankreuzen (Multiple Choice)",
+        "Lückentext (Wort einsetzen)",
+        "Lückentext (Form ergänzen)",
+        "Formbildung/Variation",
+        "Sortieren/Zuordnen",
+        "Freies Vervollständigen",
+        "Kurzantwort",
     ],
     "Französisch": [
-        "Multiple Choice",
-        "Lückentext",
-        "Kurze Antworten",
-        "Aufsatzfragen",
-        "Offene Fragen",
-        "Richtig/Falsch",
+        "Erkennen/Unterstreichen",
+        "Ankreuzen (Multiple Choice)",
+        "Lückentext (Wort einsetzen)",
+        "Lückentext (Form ergänzen)",
+        "Formbildung/Variation",
+        "Sortieren/Zuordnen",
+        "Freies Vervollständigen",
+        "Kurzantwort",
     ],
     "Spanisch": [
-        "Multiple Choice",
-        "Lückentext",
-        "Kurze Antworten",
-        "Aufsatzfragen",
-        "Offene Fragen",
-        "Richtig/Falsch",
+        "Erkennen/Unterstreichen",
+        "Ankreuzen (Multiple Choice)",
+        "Lückentext (Wort einsetzen)",
+        "Lückentext (Form ergänzen)",
+        "Formbildung/Variation",
+        "Sortieren/Zuordnen",
+        "Freies Vervollständigen",
+        "Kurzantwort",
     ],
     "Latein": [
-        "Multiple Choice",
-        "Lückentext",
-        "Kurze Antworten",
-        "Interpretationsaufgaben",
-        "Analyseaufgaben",
+        "Erkennen/Unterstreichen",
+        "Ankreuzen (Multiple Choice)",
+        "Lückentext (Form ergänzen)",
+        "Formbildung/Variation",
+        "Sortieren/Zuordnen",
+        "Kurzantwort: Bestimme Eigenschaften",
     ],
-    "Physik": ["Multiple Choice", "Rechenaufgaben", "Problemlösung", "Kurze Antworten", "Analyseaufgaben"],
-    "Chemie": ["Multiple Choice", "Rechenaufgaben", "Problemlösung", "Kurze Antworten", "Analyseaufgaben"],
-    "Biologie": ["Multiple Choice", "Offene Fragen", "Kurze Antworten", "Analyseaufgaben", "Richtig/Falsch"],
-    "Geschichte": [
-        "Multiple Choice",
-        "Offene Fragen",
-        "Aufsatzfragen",
-        "Analyseaufgaben",
-        "Interpretationsaufgaben",
-        "Erörterung",
-    ],
-    "Geographie": ["Multiple Choice", "Offene Fragen", "Kurze Antworten", "Analyseaufgaben", "Richtig/Falsch"],
-    "Politik/Wirtschaft": [
-        "Multiple Choice",
-        "Offene Fragen",
-        "Aufsatzfragen",
-        "Analyseaufgaben",
-        "Erörterung",
-    ],
-    "Sozialwissenschaften": [
-        "Multiple Choice",
-        "Offene Fragen",
-        "Aufsatzfragen",
-        "Analyseaufgaben",
-        "Erörterung",
-    ],
-    "Religion": ["Multiple Choice", "Offene Fragen", "Aufsatzfragen", "Erörterung", "Interpretationsaufgaben"],
-    "Ethik": ["Multiple Choice", "Offene Fragen", "Aufsatzfragen", "Erörterung", "Analyseaufgaben"],
-    "Philosophie": [
-        "Multiple Choice",
-        "Offene Fragen",
-        "Aufsatzfragen",
-        "Erörterung",
-        "Interpretationsaufgaben",
-        "Analyseaufgaben",
-    ],
-    "Kunst": [
-        "Multiple Choice",
-        "Offene Fragen",
-        "Analyseaufgaben",
-        "Interpretationsaufgaben",
-        "Kurze Antworten",
-    ],
-    "Musik": ["Multiple Choice", "Offene Fragen", "Analyseaufgaben", "Kurze Antworten", "Richtig/Falsch"],
-    "Sport": ["Multiple Choice", "Offene Fragen", "Kurze Antworten", "Richtig/Falsch"],
-    "Informatik": ["Multiple Choice", "Problemlösung", "Kurze Antworten", "Analyseaufgaben", "Rechenaufgaben"],
-    "Technik": ["Multiple Choice", "Problemlösung", "Kurze Antworten", "Analyseaufgaben", "Rechenaufgaben"],
-    "Wirtschaft": ["Multiple Choice", "Offene Fragen", "Rechenaufgaben", "Analyseaufgaben", "Problemlösung"],
+}
+
+# Detailed exercise type descriptions for prompt generation
+EXERCISE_TYPE_DESCRIPTIONS = {
+    "Erkennen/Unterstreichen": "Bestimmte Wörter/Elemente in einem Satz/Text finden und unterstreichen. Formulierung: 'Unterstreiche alle [Zielwörter] in diesem Satz.' Achte auf: Verwechslung mit ähnlichen Wortarten; zusammengesetzte Wörter. Gestaltung: Beispiele vorgeben; Leerzeilen lassen; Ablenker einbauen.",
+    "Ankreuzen (Multiple Choice)": "Richtige Eigenschaft, Form oder Kategorie auswählen. Formulierung: 'Welche Antwort ist richtig? Kreuze an.' Achte auf: plausible Ablenkungen. Gestaltung: 3-4 Optionen, eine richtige, sinnvolle Ablenker, eindeutige Wortwahl.",
+    "Lückentext (Wort einsetzen)": "Passendes Wort/Begriff in Kontext einsetzen. Formulierung: 'Setze in jede Lücke ein passendes Wort und achte auf die richtige Schreibweise.' Achte auf: falsche Wortart; Klein-/Großschreibung. Gestaltung: Kontext klar machen; Platz für Einträge.",
+    "Lückentext (Form ergänzen)": "Richtige Form (Artikel, Endung, Präposition) einsetzen. Formulierung: 'Schreibe in jede Lücke die richtige Form.' Achte auf: Fall/Beziehung im Satz. Gestaltung: Beispiele geben; nur eine korrekte Lösung.",
+    "Formbildung/Variation": "Wortform korrekt bilden (Plural, Zeitform, Steigerung). Formulierung: 'Bilde die passende Form von: ___ → ______.' Achte auf: reguläre Endungen, Umlautwechsel. Gestaltung: Unregelmäßige Beispiele einbauen; Lösungsmuster zeigen.",
+    "Groß-/Kleinschreibung korrigieren": "Orthografie in ganzen Sätzen überprüfen. Formulierung: 'Schreibe die Sätze richtig: Achte auf Groß- und Kleinschreibung.' Achte auf: Namen/Schlüsselwörter; Satzanfang. Gestaltung: mehrere kurze Sätze, klare Markierungen.",
+    "Wortart unterscheiden/Ausschließen": "Wörter in Kategorien zuordnen oder falsches Element finden. Formulierung: 'Kreuze an, welches Wort nicht in diese Gruppe gehört.' Achte auf: Wörter mit mehreren Funktionen. Gestaltung: Ablenker mit ähnlichen Formen wählen.",
+    "Sortieren/Zuordnen": "Wörter in Gruppen ordnen. Formulierung: 'Sortiere die Wörter in die Spalten: [Kategorie A] / [Kategorie B].' Achte auf: uneindeutige Wörter. Gestaltung: klare Kategorien; Platz für mehrere Einträge.",
+    "Freies Vervollständigen": "Eigene passende Wörter oder Sätze bilden. Formulierung: 'Vervollständige den Satz mit einem passenden Wort: Im ___ sehe ich ___.' Achte auf: ungeeignete Wortart; Rechtschreibfehler. Gestaltung: Beispiele als Hilfe; mehrere Lösungen zulassen.",
+    "Kurzantwort: Bestimme Eigenschaften": "Kurze Fakten zu einem Wort angeben. Formulierung: 'Schreibe zu jedem Wort: 1) Eigenschaft A 2) Eigenschaft B.' Achte auf: fehlende Angaben; falsche Reihenfolge. Gestaltung: Tabellarisches Layout; ausgefülltes Beispiel zeigen.",
+    "Kurzantwort": "Kurze, präzise Antworten auf spezifische Fragen. Gestaltung: Klare Fragestellung; ausreichend Platz für Antwort.",
+    "Rechenaufgaben": "Mathematische Berechnungen durchführen. Gestaltung: Klare Aufgabenstellung; Platz für Rechenweg; eindeutiges Ergebnis.",
+    "Problemlösung": "Mathematische Probleme analysieren und lösen. Gestaltung: Sachbezug herstellen; Lösungsweg nachvollziehbar; mehrere Schritte möglich.",
 }
 
 # Default exercise types for unknown subjects
-DEFAULT_EXERCISE_TYPES = ["Multiple Choice", "Offene Fragen", "Kurze Antworten"]
+DEFAULT_EXERCISE_TYPES = ["Ankreuzen (Multiple Choice)", "Kurzantwort", "Lückentext (Wort einsetzen)"]
 
 # UI Configuration
 WINDOW_TITLE = "KI Prompt Generator für Übungsaufgaben zum Lernen"
@@ -172,62 +140,67 @@ MAX_QUESTIONS = 50
 PROMPT_TEMPLATE = """Ziel:
 Erstelle ein vollständiges, {grade_level} Übungs- und Lösungsblatt zum Thema {topic_text} für {grade} {subject}.
 
-SCHRITT 1 – Recherche & Integration (nicht separat ausgeben):
-Suche im Internet nach typischen, frei zugänglichen Aufgaben und Aufgabenformaten zu {topic_text}.
-Verwende die Rechercheergebnisse ausschließlich als inhaltliche und sprachliche Orientierung – also um Schwierigkeitsgrad, Wortwahl, Aufgabentypen und typische Fehlerquellen zu erkennen.
-Die gefundenen Inhalte dürfen nicht direkt übernommen oder zitiert, sondern müssen vollständig neu formuliert und abgewandelt werden.
-Gib keine Rechercheergebnisse oder Quellen separat aus.
-Integriere sie automatisch in die Aufgaben (z. B. in der Formulierung, im Schwierigkeitsgrad oder in typischen Antwortoptionen).
+Anweisung (automatischer Ablauf, keine Rückfragen oder Zwischenschritte):
 
-SCHRITT 2 – Aufgabenerstellung:
+Führe intern eine kurze Internetrecherche durch, um typische frei zugängliche Aufgaben und Aufgabenformate zu diesem Thema zu erkennen. Verwende diese Recherche ausschließlich zur inhaltlichen und sprachlichen Orientierung – also für Schwierigkeitsgrad, Wortwahl, Aufgabentypen und typische Fehlerquellen. Zeige keine Quellen oder Rechercheergebnisse an und übernehme keine Inhalte direkt. Integriere das gewonnene Wissen automatisch in die Aufgabenformulierungen, in Antwortoptionen und im Schwierigkeitsgrad.
+
+Erstelle anschließend direkt alle Aufgaben und beide PDF-Dateien in einem Durchlauf.
+
+------------------------------------------------------------
+AUFGABENERSTELLUNG
+------------------------------------------------------------
+
 {distribution_info}
 
-Aufgabentypen: {exercise_types_text} (abwechslungsreich gemischt)
+Verwende die folgenden Aufgabentypen abwechslungsreich über alle Übungsaufgaben verteilt:
+
+{exercise_type_details}
 
 {subtopic_instructions}
 
-Anforderungen:
+Gestaltungshinweise für jede Aufgabe:
+• Klare, {grade_level} Formulierung
 • {language_instruction}
-• Kurze, klare Aufgabenstellungen
-• Aufgabentypen abwechslungsreich gemischt
-• Aufgaben sollen unterschiedliche Aspekte abdecken und zum Nachdenken anregen
 • Typische Fehlerquellen oder Missverständnisse gezielt einbauen
-
-Für jede Aufgabe:
-• Eine klar formulierte Fragestellung
-• Falls Multiple Choice: drei Antwortoptionen (eine richtig)
-• Falls Lückentext: vollständiger Satz mit Lücke
-• Falls Analyseaufgabe: kleine Denksituation mit Aufforderung zur Erklärung
+• Kurze, klare Anweisungen oben bei jeder Aufgabe
+• Sichtbare Linien oder Kästchen für Antworten
+• Nummerierte Aufgaben mit ausreichendem Zeilenabstand
+• Bei Mehrfachlösungen Hinweis „Mehrere Antworten möglich"
+• Ablenker bewusst so wählen, dass typische Fehler getestet werden
 
 Nach den Aufgaben:
 • Vollständige Lösungen
 • Kurze, {grade_level} Erklärungen („Warum ist das richtig?")
 
-SCHRITT 3 – PDF-Erstellung:
-Erstelle direkt zwei PDF-Dateien im DIN-A4-Format, Schriftart Arial 12 pt:
+------------------------------------------------------------
+PDF-ERSTELLUNG
+------------------------------------------------------------
+
+Erstelle zwei DIN-A4-PDFs, Schriftart Arial (oder Helvetica, falls Arial nicht verfügbar), Schriftgröße 12 pt.
 
 1. Übungsblatt (ohne Lösungen)
    • Titel: „{topic_text} – Übungsblatt ({grade} {subject})"
    • Felder für Name und Datum
-   • Überschriften für jedes Unterthema klar abgesetzt
-   • Jede Aufgabe nummeriert
-   • Zwischenräume zwischen den Aufgaben
+   • Deutliche Überschriften für jeden Übungsbereich
+   • Nummerierte Aufgaben mit ausreichend Abstand
    • {grade_level}, sauberes Layout
 
 2. Lösungsblatt (mit Lösungen und Erklärungen)
    • Gleiche Struktur
-   • Lösungen und kurze {grade_level} Erklärungen direkt unter jeder Aufgabe
+   • Lösungen und kurze Erklärungen direkt unter jeder Aufgabe
 
-Layoutanforderungen:
-• Arial, 12 pt
-• Deutliche Überschriften
-• Ausreichend Abstand zwischen Aufgaben
-• {grade_level} Layout, klar und freundlich
+------------------------------------------------------------
+AUSGABE
+------------------------------------------------------------
 
-AUSGABE:
-Erstelle die beiden PDF-Dateien (Übungsblatt & Lösungsblatt) direkt, ohne Zwischenschritt oder Rückfrage.
-Verwende alle integrierten Rechercheinformationen ausschließlich zur Qualität der Aufgaben.
-Gib keine Quellen, Links oder Rechercheergebnisse im Text oder Anhang aus.
+Führe den gesamten Prozess automatisch in einem Durchlauf aus:
+• Recherche → Integration → Aufgaben → PDFs
+• Keine Vorschauen oder Rückfragen
+• Erstelle beide PDF-Dateien direkt im Arbeitsbereich
+• Zeige keine Quellen, Links oder Webinhalte separat an
 
-ZUSATZ:
-Falls du während der Recherche zusätzliche Muster, typische Fehler oder bewährte Formate erkennst, integriere sie automatisch in die Aufgaben — ohne sie gesondert zu erwähnen oder offenzulegen."""
+------------------------------------------------------------
+ZUSATZ
+------------------------------------------------------------
+
+Falls während der internen Recherche zusätzliche Muster, häufige Fehler oder bewährte Formate erkannt werden, integriere sie automatisch in die Aufgaben, ohne sie gesondert zu erwähnen."""
