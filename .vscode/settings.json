@@ -8,5 +8,10 @@
         "flake8.ini"
     ],
     "editor.formatOnSave": true,
-    "postman.settings.dotenv-detection-notification-visibility": false // Format on save
+    "postman.settings.dotenv-detection-notification-visibility": false, // Format on save
+    
+    // Python Environment Settings
+    "python.defaultInterpreterPath": "${workspaceFolder}/env/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true
 }

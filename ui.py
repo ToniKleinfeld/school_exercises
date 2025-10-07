@@ -58,38 +58,88 @@ class AIPromptGeneratorUI:
         style.theme_use("clam")
 
     def create_widgets(self):
-        """Create and arrange all GUI widgets"""
-        # Main frame with padding
-        main_frame = ttk.Frame(self.root, padding="20")
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-
+        """Create and arrange all GUI widgets with tab system"""
         # Configure grid weights for responsive design
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
-        main_frame.columnconfigure(1, weight=1)
+
+        # Create notebook (tab container)
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
+
+        # Tab 1: Standard Prompt Generator
+        self.prompt_tab = ttk.Frame(self.notebook, padding="20")
+        self.notebook.add(self.prompt_tab, text="Prompt Generator (PDF)")
+
+        # Tab 2: JSON Prompt Generator
+        self.json_prompt_tab = ttk.Frame(self.notebook, padding="20")
+        self.notebook.add(self.json_prompt_tab, text="Prompt Generator (JSON)")
+
+        # Tab 3: JSON Import & PDF Generator
+        self.json_import_tab = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(self.json_import_tab, text="JSON → PDF Generator")
+
+        # Create content for each tab
+        self.create_prompt_generator_tab(self.prompt_tab, use_json=False)
+        self.create_prompt_generator_tab(self.json_prompt_tab, use_json=True)
+        self.create_json_import_tab(self.json_import_tab)
+
+    def create_prompt_generator_tab(self, parent_frame, use_json=False):
+        """Create prompt generator interface"""
+        # Configure grid
+        parent_frame.columnconfigure(1, weight=1)
 
         # Title
-        title_label = ttk.Label(main_frame, text=MAIN_TITLE, font=MAIN_FONT)
+        tab_title = "JSON-Prompt Generator" if use_json else "Standard Prompt Generator"
+        title_label = ttk.Label(parent_frame, text=tab_title, font=MAIN_FONT)
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
 
         # Input fields
-        self.create_input_fields(main_frame)
+        self.create_input_fields(parent_frame)
 
         # Generate button
-        # Generate button - using tk.Button for consistent styling with copy button
-        self.generate_button = tk.Button(
-            main_frame, text=GENERATE_BUTTON_TEXT, command=self.generate_prompt, font=LABEL_FONT, relief="raised", bd=2
+        button_text = "Generate JSON Prompt" if use_json else GENERATE_BUTTON_TEXT
+        generate_button = tk.Button(
+            parent_frame,
+            text=button_text,
+            command=lambda: self.generate_prompt(use_json=use_json),
+            font=LABEL_FONT,
+            relief="raised",
+            bd=2,
         )
-        self.generate_button.grid(row=8, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
+        generate_button.grid(row=8, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
+
+        # Store button reference
+        if use_json:
+            self.json_generate_button = generate_button
+        else:
+            self.generate_button = generate_button
 
         # Output section
-        self.create_output_section(main_frame)
+        self.create_output_section(parent_frame, use_json=use_json)
 
-        # Copy button - placed after output section (using tk.Button for better styling support)
-        self.copy_button = tk.Button(
-            main_frame, text=COPY_BUTTON_TEXT, command=self.copy_to_clipboard, font=LABEL_FONT, relief="raised", bd=2
+        # Copy button
+        copy_button = tk.Button(
+            parent_frame,
+            text=COPY_BUTTON_TEXT,
+            command=lambda: self.copy_to_clipboard(use_json=use_json),
+            font=LABEL_FONT,
+            relief="raised",
+            bd=2,
         )
-        self.copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
+        copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
+
+        # Store button reference
+        if use_json:
+            self.json_copy_button = copy_button
+        else:
+            self.copy_button = copy_button
+
+    def create_json_import_tab(self, parent_frame):
+        """Create JSON import and PDF generation interface"""
+        from json_import_ui import JSONImportUI
+
+        self.json_import_ui = JSONImportUI(parent_frame)
 
     def create_input_fields(self, parent):
         """Create all input fields with labels"""
@@ -198,20 +248,27 @@ class AIPromptGeneratorUI:
 
             self.exercise_checkboxes.append(checkbox)
 
-    def create_output_section(self, parent):
+    def create_output_section(self, parent, use_json=False):
         """Create the output section with generated prompt display"""
         # Output label
-        output_label = ttk.Label(parent, text="Generierter Prompt:", font=LABEL_FONT)
+        label_text = "Generierter JSON-Prompt:" if use_json else "Generierter Prompt:"
+        output_label = ttk.Label(parent, text=label_text, font=LABEL_FONT)
         output_label.grid(row=9, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
 
         # Output text area with scrollbar
-        self.output_text = scrolledtext.ScrolledText(parent, height=8, width=70, wrap=tk.WORD, font=OUTPUT_FONT)
-        self.output_text.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+        output_text = scrolledtext.ScrolledText(parent, height=8, width=70, wrap=tk.WORD, font=OUTPUT_FONT)
+        output_text.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+
+        # Store reference
+        if use_json:
+            self.json_output_text = output_text
+        else:
+            self.output_text = output_text
 
         # Configure text area to expand
         parent.rowconfigure(10, weight=1)
 
-    def generate_prompt(self):
+    def generate_prompt(self, use_json=False):
         """Generate the AI prompt based on user inputs"""
         # Get values from input fields
         grade = self.grade_var.get()
@@ -244,13 +301,22 @@ class AIPromptGeneratorUI:
             return
 
         # Generate the prompt using the prompt generator
-        prompt = self.prompt_generator.create_prompt_template(
-            num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
-        )
+        if use_json:
+            prompt = self.prompt_generator.create_json_prompt_template(
+                num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
+            )
+            output_text = self.json_output_text
+            button = self.json_generate_button
+        else:
+            prompt = self.prompt_generator.create_prompt_template(
+                num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
+            )
+            output_text = self.output_text
+            button = self.generate_button
 
         # Display the prompt in the output area
-        self.output_text.delete(1.0, tk.END)
-        self.output_text.insert(1.0, prompt)
+        output_text.delete(1.0, tk.END)
+        output_text.insert(1.0, prompt)
 
         # Automatically copy to clipboard
         try:
@@ -259,12 +325,15 @@ class AIPromptGeneratorUI:
             pass  # Silent fail for auto-copy
 
         # Show visual feedback: green flash for text area AND button success
-        self.show_text_area_success()
-        self.show_generate_button_success()
+        self.show_text_area_success(output_text)
+        self.show_generate_button_success(button)
 
-    def copy_to_clipboard(self):
+    def copy_to_clipboard(self, use_json=False):
         """Copy the generated prompt to clipboard"""
-        prompt_text = self.output_text.get(1.0, tk.END).strip()
+        output_text = self.json_output_text if use_json else self.output_text
+        copy_button = self.json_copy_button if use_json else self.copy_button
+
+        prompt_text = output_text.get(1.0, tk.END).strip()
 
         if not prompt_text:
             messagebox.showwarning(
@@ -275,49 +344,50 @@ class AIPromptGeneratorUI:
         try:
             pyperclip.copy(prompt_text)
             # Show visual feedback: green button flash and checkmark
-            self.show_copy_button_success()
+            self.show_copy_button_success(copy_button)
         except Exception as e:
             messagebox.showerror("Fehler", f"Fehler beim Kopieren in die Zwischenablage: {str(e)}")
 
-    def show_text_area_success(self):
+    def show_text_area_success(self, output_text):
         """Show green flash feedback for successful prompt generation"""
         # Store original background color
-        original_bg = self.output_text.cget("bg")
+        original_bg = output_text.cget("bg")
 
         # Set green background
-        self.output_text.configure(bg="lightgreen")
+        output_text.configure(bg="lightgreen")
 
         # Reset to original color after 1.5 seconds
-        self.root.after(1500, lambda: self.output_text.configure(bg=original_bg))
+        self.root.after(1500, lambda: output_text.configure(bg=original_bg))
 
-    def show_copy_button_success(self):
+    def show_copy_button_success(self, copy_button):
         """Show green flash feedback for successful clipboard copy"""
         # Store original button properties
-        original_text = self.copy_button.cget("text")
-        original_relief = self.copy_button.cget("relief")
-        original_bg = self.copy_button.cget("bg")
+        original_text = copy_button.cget("text")
+        original_relief = copy_button.cget("relief")
+        original_bg = copy_button.cget("bg")
 
         # Set success styling (now works with tk.Button)
-        self.copy_button.configure(text="✓ Copy to Clipboard", relief="solid", bg="lightgreen")
+        copy_button.configure(text="✓ Copy to Clipboard", relief="solid", bg="lightgreen")
 
         # Reset to original styling after 2 seconds
         def reset_button():
-            self.copy_button.configure(text=original_text, relief=original_relief, bg=original_bg)
+            copy_button.configure(text=original_text, relief=original_relief, bg=original_bg)
 
         self.root.after(2000, reset_button)
 
-    def show_generate_button_success(self):
+    def show_generate_button_success(self, generate_button):
         """Show green flash feedback for successful prompt generation"""
         # Store original button properties
-        original_text = self.generate_button.cget("text")
-        original_relief = self.generate_button.cget("relief")
-        original_bg = self.generate_button.cget("bg")
+        original_text = generate_button.cget("text")
+        original_relief = generate_button.cget("relief")
+        original_bg = generate_button.cget("bg")
 
         # Set success styling
-        self.generate_button.configure(text="✓ Generate Prompt", relief="solid", bg="lightgreen")
+        success_text = "✓ " + original_text
+        generate_button.configure(text=success_text, relief="solid", bg="lightgreen")
 
         # Reset to original styling after 2 seconds
         def reset_button():
-            self.generate_button.configure(text=original_text, relief=original_relief, bg=original_bg)
+            generate_button.configure(text=original_text, relief=original_relief, bg=original_bg)
 
         self.root.after(2000, reset_button)

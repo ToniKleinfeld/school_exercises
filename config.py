@@ -152,7 +152,11 @@ AUFGABENERSTELLUNG
 
 {distribution_info}
 
-Verwende die folgenden Aufgabentypen abwechslungsreich über alle Übungsaufgaben verteilt:
+WICHTIG - Aufgabenverteilung:
+Für jedes Unterthema wird JEDER gewählte Aufgabentyp verwendet.
+Pro Aufgabentyp werden genau {num_questions} Fragen/Teilaufgaben erstellt.
+
+Verfügbare Aufgabentypen mit Beschreibungen:
 
 {exercise_type_details}
 
@@ -204,3 +208,67 @@ ZUSATZ
 ------------------------------------------------------------
 
 Falls während der internen Recherche zusätzliche Muster, häufige Fehler oder bewährte Formate erkannt werden, integriere sie automatisch in die Aufgaben, ohne sie gesondert zu erwähnen."""
+
+# JSON Prompt Template - for AI models that cannot generate PDFs directly
+JSON_PROMPT_TEMPLATE = """Ziel:
+Erstelle strukturierte Übungsaufgaben zum Thema {topic_text} für {grade} {subject} im JSON-Format.
+
+Anweisung (automatischer Ablauf, keine Rückfragen):
+
+Führe intern eine kurze Internetrecherche durch, um typische Aufgaben und Aufgabenformate zu diesem Thema zu erkennen. Verwende diese Recherche ausschließlich zur Orientierung für Schwierigkeitsgrad, Wortwahl und Aufgabentypen. Zeige keine Quellen oder Rechercheergebnisse an.
+
+------------------------------------------------------------
+AUFGABENERSTELLUNG
+------------------------------------------------------------
+
+{distribution_info}
+
+WICHTIG - Aufgabenverteilung:
+Für jedes Unterthema wird JEDER gewählte Aufgabentyp verwendet.
+Pro Aufgabentyp werden genau {num_questions} Fragen/Teilaufgaben erstellt.
+
+Verfügbare Aufgabentypen mit Beschreibungen:
+
+{exercise_type_details}
+
+{subtopic_instructions}
+
+Gestaltungshinweise:
+• Klare, {grade_level} Formulierung
+• {language_instruction}
+• Typische Fehlerquellen gezielt einbauen
+• Kurze, präzise Aufgabenstellungen
+
+------------------------------------------------------------
+AUSGABEFORMAT: JSON
+------------------------------------------------------------
+
+Gib die Aufgaben im folgenden JSON-Format aus (nur das JSON, keine weiteren Texte):
+
+{{
+  "metadata": {{
+    "topic": "{topic_text}",
+    "grade": "{grade}",
+    "subject": "{subject}",
+    "subtopics": [Liste der Übungsbereiche]
+  }},
+  "exercises": [
+    {{
+      "id": 1,
+      "type": "Aufgabentyp",
+      "subtopic": "Übungsbereich",
+      "question": "Die Aufgabenstellung",
+      "options": ["Option 1", "Option 2", "Option 3"] oder null,
+      "answer": "Die korrekte Antwort",
+      "explanation": "Kurze, {grade_level} Erklärung warum das richtig ist"
+    }},
+    ... weitere Aufgaben
+  ]
+}}
+
+WICHTIG:
+• Gib NUR valides JSON aus
+• Keine zusätzlichen Texte vor oder nach dem JSON
+• Alle Strings müssen in Anführungszeichen
+• options ist null wenn nicht Multiple Choice
+• Jede Aufgabe braucht id, type, subtopic, question, answer, explanation"""
