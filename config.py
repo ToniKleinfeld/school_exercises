@@ -172,6 +172,13 @@ Gestaltungshinweise für jede Aufgabe:
 • Bei Mehrfachlösungen Hinweis „Mehrere Antworten möglich"
 • Ablenker bewusst so wählen, dass typische Fehler getestet werden
 
+NEU: Strukturiere Aufgaben mit einer Hauptfrage und mehreren Unteraufgaben:
+• Hauptfrage: z.B. "1. Unterstreiche alle Pluralformen in diesem Satz:"
+• Zeilenumbruch nach der Hauptfrage
+• Unteraufgaben als Bullet Points (–) mit konkreten Beispielen:
+  – "Die Katzen jagen Mäuse, und die Hunde bellen laut."
+  – "Die Kinder spielen mit ihren Bällen im Garten."
+
 Nach den Aufgaben:
 • Vollständige Lösungen
 • Kurze, {grade_level} Erklärungen („Warum ist das richtig?")
@@ -227,6 +234,10 @@ WICHTIG - Aufgabenverteilung:
 Für jedes Unterthema wird JEDER gewählte Aufgabentyp verwendet.
 Pro Aufgabentyp werden genau {num_questions} Fragen/Teilaufgaben erstellt.
 
+NEU: Strukturiere jede Aufgabe mit einer Hauptfrage und mehreren Unteraufgaben:
+• Hauptfrage: z.B. "Unterstreiche alle Pluralformen in diesem Satz:"
+• Unteraufgaben: 2-3 konkrete Beispiele als Bullet Points
+
 Verfügbare Aufgabentypen mit Beschreibungen:
 
 {exercise_type_details}
@@ -238,6 +249,7 @@ Gestaltungshinweise:
 • {language_instruction}
 • Typische Fehlerquellen gezielt einbauen
 • Kurze, präzise Aufgabenstellungen
+• Pro Hauptaufgabe 2-3 Unteraufgaben erstellen
 
 ------------------------------------------------------------
 AUSGABEFORMAT: JSON
@@ -245,6 +257,7 @@ AUSGABEFORMAT: JSON
 
 Gib die Aufgaben im folgenden JSON-Format aus (nur das JSON, keine weiteren Texte):
 
+Für Aufgaben mit Unteraufgaben (BEVORZUGT):
 {{
   "metadata": {{
     "topic": "{topic_text}",
@@ -257,18 +270,44 @@ Gib die Aufgaben im folgenden JSON-Format aus (nur das JSON, keine weiteren Text
       "id": 1,
       "type": "Aufgabentyp",
       "subtopic": "Übungsbereich",
-      "question": "Die Aufgabenstellung",
-      "options": ["Option 1", "Option 2", "Option 3"] oder null,
-      "answer": "Die korrekte Antwort",
-      "explanation": "Kurze, {grade_level} Erklärung warum das richtig ist"
+      "question": "Die Hauptfrage/Anweisung",
+      "sub_questions": [
+        {{
+          "question": "Konkrete Beispielaufgabe 1",
+          "answer": "Die korrekte Antwort",
+          "explanation": "Kurze Erklärung"
+        }},
+        {{
+          "question": "Konkrete Beispielaufgabe 2",
+          "answer": "Die korrekte Antwort",
+          "explanation": "Kurze Erklärung"
+        }}
+      ],
+      "explanation": "Allgemeine Erklärung für die ganze Aufgabe (optional)"
     }},
     ... weitere Aufgaben
   ]
 }}
 
+Für einfache Aufgaben (nur wenn nötig, z.B. Multiple Choice):
+{{
+  "exercises": [
+    {{
+      "id": 2,
+      "type": "Multiple Choice",
+      "subtopic": "Übungsbereich",
+      "question": "Die Aufgabenstellung",
+      "options": ["Option 1", "Option 2", "Option 3"],
+      "answer": "Die korrekte Antwort",
+      "explanation": "Kurze Erklärung"
+    }}
+  ]
+}}
+
 WICHTIG:
+• Bevorzuge das Format mit sub_questions für bessere Strukturierung
 • Gib NUR valides JSON aus
 • Keine zusätzlichen Texte vor oder nach dem JSON
 • Alle Strings müssen in Anführungszeichen
-• options ist null wenn nicht Multiple Choice
-• Jede Aufgabe braucht id, type, subtopic, question, answer, explanation"""
+• Jede Hauptaufgabe sollte 2-3 Unteraufgaben haben
+• Unteraufgaben müssen sinnvoll zusammengehören"""

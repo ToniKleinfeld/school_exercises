@@ -237,12 +237,22 @@ class JSONImportUI:
             "exercises": [
                 {
                     "id": 1,
-                    "type": "Lückentext (Wort einsetzen)",
+                    "type": "Unterstreichen",
                     "subtopic": "Plural",
-                    "question": "Setze die richtige Pluralform ein: Das Haus → Die ___",
-                    "options": None,
-                    "answer": "Häuser",
-                    "explanation": "Bei 'Haus' wird der Umlaut verwendet und -er angehängt.",
+                    "question": "Unterstreiche alle Pluralformen in diesem Satz:",
+                    "sub_questions": [
+                        {
+                            "question": '"Die Katzen jagen Mäuse, und die Hunde bellen laut."',
+                            "answer": "Katzen, Mäuse, Hunde (unterstrichen)",
+                            "explanation": "Diese Wörter stehen im Plural.",
+                        },
+                        {
+                            "question": '"Die Kinder spielen mit ihren Bällen im Garten."',
+                            "answer": "Kinder, Bällen (unterstrichen)",
+                            "explanation": "Kinder und Bällen sind Pluralformen.",
+                        },
+                    ],
+                    "explanation": "Pluralformen erkennt man oft an der Endung und dem Artikel 'die'.",
                 },
                 {
                     "id": 2,
@@ -257,10 +267,19 @@ class JSONImportUI:
                     "id": 3,
                     "type": "Formbildung/Variation",
                     "subtopic": "Plural",
-                    "question": "Bilde die Pluralform: Der Apfel → ___",
-                    "options": None,
-                    "answer": "Die Äpfel",
-                    "explanation": "Bei 'Apfel' wird ein Umlaut verwendet: a → ä.",
+                    "question": "Bilde die Pluralform:",
+                    "sub_questions": [
+                        {
+                            "question": "Der Apfel → ___",
+                            "answer": "Die Äpfel",
+                            "explanation": "Bei 'Apfel' wird ein Umlaut verwendet: a → ä.",
+                        },
+                        {
+                            "question": "Das Kind → ___",
+                            "answer": "Die Kinder",
+                            "explanation": "Bei 'Kind' wird -er angehängt.",
+                        },
+                    ],
                 },
             ],
         }
@@ -268,7 +287,7 @@ class JSONImportUI:
         json_string = json.dumps(sample_json, indent=2, ensure_ascii=False)
         self.json_text.delete(1.0, tk.END)
         self.json_text.insert(1.0, json_string)
-        self.status_label.config(text="Beispiel-JSON geladen", foreground="blue")
+        self.status_label.config(text="Beispiel-JSON mit neuer Struktur geladen", foreground="blue")
 
     def show_validation_success(self):
         """Show visual feedback for successful validation"""
