@@ -169,45 +169,65 @@ MIN_QUESTIONS = 1
 MAX_QUESTIONS = 50
 
 # Prompt Template - can be easily modified without changing code logic
-PROMPT_TEMPLATE = """SCHRITT 1: RECHERCHE & INTEGRATION (nicht separat ausgeben)
+PROMPT_TEMPLATE = """Ziel:
+Erstelle ein vollständiges, {grade_level} Übungs- und Lösungsblatt zum Thema {topic_text} für {grade} {subject}.
 
-Recherchiere im Internet nach existierenden Aufgaben zu: {topic_text}
-(Klassenstufe: {grade}, Fach: {subject}, Aufgabentypen: {exercise_types_text})
+SCHRITT 1 – Recherche & Integration (nicht separat ausgeben):
+Suche im Internet nach typischen, frei zugänglichen Aufgaben und Aufgabenformaten zu {topic_text}.
+Verwende die Rechercheergebnisse ausschließlich als inhaltliche und sprachliche Orientierung – also um Schwierigkeitsgrad, Wortwahl, Aufgabentypen und typische Fehlerquellen zu erkennen.
+Die gefundenen Inhalte dürfen nicht direkt übernommen oder zitiert, sondern müssen vollständig neu formuliert und abgewandelt werden.
+Gib keine Rechercheergebnisse oder Quellen separat aus.
+Integriere sie automatisch in die Aufgaben (z. B. in der Formulierung, im Schwierigkeitsgrad oder in typischen Antwortoptionen).
 
-→ Verwende die gefundenen Informationen direkt zur Erstellung eigener, inspiriert-abgewandelter Aufgaben.
-→ Gib die Rechercheergebnisse nicht separat aus, sondern arbeite sie vollständig in die Aufgaben ein (Schwierigkeitsgrad, Fragetypen, Wortwahl).
-→ Integriere automatisch typische Fragestellungen, bewährte Aufgabenformate und erkannte Fehlerquellen.
-
-SCHRITT 2: AUFGABENERSTELLUNG
-
+SCHRITT 2 – Aufgabenerstellung:
 {distribution_info}
 
-{language_instruction}
+Aufgabentypen: {exercise_types_text} (abwechslungsreich gemischt)
 
-Strukturierung nach Unterthemen:
 {subtopic_instructions}
 
-Für jede Aufgabe: klare, einfache Formulierungen mit angemessenem Schwierigkeitsgrad
+Anforderungen:
+• {language_instruction}
+• Kurze, klare Aufgabenstellungen
+• Aufgabentypen abwechslungsreich gemischt
+• Aufgaben sollen unterschiedliche Aspekte abdecken und zum Nachdenken anregen
+• Typische Fehlerquellen oder Missverständnisse gezielt einbauen
 
-Danach: vollständige Lösung und kurze {grade_level} Erklärung
+Für jede Aufgabe:
+• Eine klar formulierte Fragestellung
+• Falls Multiple Choice: drei Antwortoptionen (eine richtig)
+• Falls Lückentext: vollständiger Satz mit Lücke
+• Falls Analyseaufgabe: kleine Denksituation mit Aufforderung zur Erklärung
 
-WICHTIG: Erstelle tiefgreifende, durchdachte Aufgaben die verschiedene Aspekte des jeweiligen Unterthemas abdecken und zum Nachdenken anregen.
+Nach den Aufgaben:
+• Vollständige Lösungen
+• Kurze, {grade_level} Erklärungen („Warum ist das richtig?")
 
-SCHRITT 3: PDF-ERSTELLUNG
+SCHRITT 3 – PDF-Erstellung:
+Erstelle direkt zwei PDF-Dateien im DIN-A4-Format, Schriftart Arial 12 pt:
 
-Erstelle zwei PDF-Dateien im DIN A4-Format, Arial 12 pt:
+1. Übungsblatt (ohne Lösungen)
+   • Titel: „{topic_text} – Übungsblatt ({grade} {subject})"
+   • Felder für Name und Datum
+   • Überschriften für jedes Unterthema klar abgesetzt
+   • Jede Aufgabe nummeriert
+   • Zwischenräume zwischen den Aufgaben
+   • {grade_level}, sauberes Layout
 
-1. Übungsblatt (ohne Lösungen) – Titel, Name-/Datumsfeld, übersichtliche Gliederung, Absätze zwischen Unterthemen
-2. Lösungsblatt (mit Antworten + Erklärungen) – gleiche Struktur, aber mit Lösungen direkt unter jeder Aufgabe
+2. Lösungsblatt (mit Lösungen und Erklärungen)
+   • Gleiche Struktur
+   • Lösungen und kurze {grade_level} Erklärungen direkt unter jeder Aufgabe
 
 Layoutanforderungen:
-- Überschriften klar abgesetzt
-- Jede Aufgabe nummeriert
-- Zwischenräume zwischen den Aufgaben
-- kindgerechtes, sauberes Layout
+• Arial, 12 pt
+• Deutliche Überschriften
+• Ausreichend Abstand zwischen Aufgaben
+• {grade_level} Layout, klar und freundlich
 
 AUSGABE:
-Erstelle direkt zwei PDFs (Übungsblatt ohne Lösungen und Lösungsblatt mit Lösungen und kindgerechten Erklärungen) im DIN-A4-Format, Arial 12 pt. Gib die Dateien ohne Rückfrage aus.
+Erstelle die beiden PDF-Dateien (Übungsblatt & Lösungsblatt) direkt, ohne Zwischenschritt oder Rückfrage.
+Verwende alle integrierten Rechercheinformationen ausschließlich zur Qualität der Aufgaben.
+Gib keine Quellen, Links oder Rechercheergebnisse im Text oder Anhang aus.
 
 ZUSATZ:
-Wenn du zusätzliche Informationen aus der Recherche verwendest (z. B. typische Fehlerquellen oder Aufgabentypen), integriere sie automatisch in die Aufgaben — ohne sie separat aufzuführen."""
+Falls du während der Recherche zusätzliche Muster, typische Fehler oder bewährte Formate erkennst, integriere sie automatisch in die Aufgaben — ohne sie gesondert zu erwähnen oder offenzulegen."""
