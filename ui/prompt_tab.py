@@ -10,7 +10,7 @@ Date: October 2025
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 import pyperclip
-from .widgets import ToggleSwitch
+from .widgets import ToggleSwitch, RoundedFrame
 from config import (
     GRADES,
     SUBJECTS,
@@ -73,21 +73,39 @@ class PromptGeneratorTab:
         title_label = ttk.Label(self.parent, text="Prompt Generator", font=MAIN_FONT)
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
 
-        # Output mode selector (PDF/JSON Toggle)
-        mode_frame = ttk.Frame(self.parent)
-        mode_frame.grid(row=1, column=0, columnspan=2, pady=(0, 20))
-
-        pdf_label = ttk.Label(mode_frame, text="PDF", font=LABEL_FONT)
-        pdf_label.pack(side=tk.LEFT, padx=5)
-
-        self.toggle_switch = ToggleSwitch(mode_frame, command=self.on_mode_changed)
-        self.toggle_switch.pack(side=tk.LEFT, padx=10)
-
-        json_label = ttk.Label(mode_frame, text="JSON", font=LABEL_FONT)
-        json_label.pack(side=tk.LEFT, padx=5)
-
         # Input fields
-        self.create_input_fields(start_row=2)
+        self.create_input_fields(start_row=1)
+
+        # Output mode selector (PDF/JSON Toggle) - ÜBER dem Generate Button
+        # Erstelle einen RoundedFrame Container (mittig und nur um den Inhalt)
+        rounded_container = RoundedFrame(
+            self.parent,
+            width=240,  # Kleinere, inhaltbasierte Breite
+            height=65,  # Angepasste Höhe
+            corner_radius=16,
+            bg_color="white",
+            border_color="black",
+            border_width=1,
+            padding=15,
+        )
+        # Zentriert ohne sticky - wird nicht gestreckt
+        rounded_container.grid(row=8, column=0, columnspan=2, pady=(10, 10))
+
+        # Hole den inneren Frame für Widgets
+        mode_frame = rounded_container.get_frame()
+
+        # PDF Label
+        pdf_label = tk.Label(mode_frame, text="PDF", font=LABEL_FONT, bg="white")
+        pdf_label.pack(side=tk.LEFT, padx=8)
+
+        # Toggle Switch
+        self.toggle_switch = ToggleSwitch(mode_frame, command=self.on_mode_changed)
+        self.toggle_switch.configure(bg="white")
+        self.toggle_switch.pack(side=tk.LEFT, padx=12)
+
+        # JSON Label
+        json_label = tk.Label(mode_frame, text="JSON", font=LABEL_FONT, bg="white")
+        json_label.pack(side=tk.LEFT, padx=8)
 
         # Generate button
         self.generate_button = tk.Button(

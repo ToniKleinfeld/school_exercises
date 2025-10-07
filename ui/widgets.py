@@ -8,12 +8,99 @@ Date: October 2025
 """
 
 import tkinter as tk
+from tkinter import ttk
+
+
+class RoundedFrame(tk.Canvas):
+    """Canvas-based frame with rounded corners and border"""
+
+    def __init__(
+        self,
+        parent,
+        width=400,
+        height=100,
+        corner_radius=16,
+        bg_color="white",
+        border_color="black",
+        border_width=1,
+        padding=20,
+        **kwargs
+    ):
+        super().__init__(parent, width=width, height=height, highlightthickness=0, **kwargs)
+        self.corner_radius = corner_radius
+        self.bg_color = bg_color
+        self.border_color = border_color
+        self.border_width = border_width
+        self.padding = padding
+
+        # Configure canvas background to match parent
+        try:
+            parent_bg = parent.cget("bg")
+        except Exception:
+            parent_bg = "#f0f0f0"
+        self.configure(bg=parent_bg)
+
+        # Draw the rounded rectangle
+        self.draw_rounded_rect()
+
+        # Create inner frame for content (use tk.Frame for bg color support)
+        self.inner_frame = tk.Frame(self, bg=bg_color)
+        self.frame_window = self.create_window(
+            padding,
+            padding,
+            window=self.inner_frame,
+            anchor="nw",
+            width=width - 2 * padding,
+            height=height - 2 * padding,
+        )
+
+    def draw_rounded_rect(self):
+        """Draw a rounded rectangle with border"""
+        x1, y1 = self.border_width, self.border_width
+        x2 = self.winfo_reqwidth() - self.border_width
+        y2 = self.winfo_reqheight() - self.border_width
+        r = self.corner_radius
+
+        # Draw background with rounded corners
+        points = [
+            x1 + r,
+            y1,
+            x2 - r,
+            y1,
+            x2,
+            y1,
+            x2,
+            y1 + r,
+            x2,
+            y2 - r,
+            x2,
+            y2,
+            x2 - r,
+            y2,
+            x1 + r,
+            y2,
+            x1,
+            y2,
+            x1,
+            y2 - r,
+            x1,
+            y1 + r,
+            x1,
+            y1,
+        ]
+
+        # Create filled polygon for background
+        self.create_polygon(points, smooth=True, fill=self.bg_color, outline=self.border_color, width=self.border_width)
+
+    def get_frame(self):
+        """Get the inner frame for adding widgets"""
+        return self.inner_frame
 
 
 class ToggleSwitch(tk.Canvas):
     """Custom toggle switch widget with animation"""
 
-    def __init__(self, parent, width=60, height=30, command=None):
+    def __init__(self, parent, width=40, height=20, command=None):
         super().__init__(parent, width=width, height=height, bg="#f0f0f0", highlightthickness=0, cursor="hand2")
         self.width = width
         self.height = height
