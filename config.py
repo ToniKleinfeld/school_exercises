@@ -178,6 +178,12 @@ NEU: Strukturiere Aufgaben mit einer Hauptfrage und mehreren Unteraufgaben:
 • Unteraufgaben als Bullet Points (–) mit konkreten Beispielen:
   – "Die Katzen jagen Mäuse, und die Hunde bellen laut."
   – "Die Kinder spielen mit ihren Bällen im Garten."
+  – [3-5 Beispiele pro Hauptaufgabe]
+
+WICHTIG - Struktur pro Unterthema:
+• Jedes Unterthema bekommt eine festgelegte Anzahl von Aufgaben
+• Pro Unterthema: {num_questions} Aufgaben gleichmäßig auf die Aufgabentypen verteilt
+• Jede Hauptaufgabe enthält 3-5 konkrete Unteraufgaben/Beispiele
 
 Nach den Aufgaben:
 • Vollständige Lösungen
@@ -230,13 +236,15 @@ AUFGABENERSTELLUNG
 
 {distribution_info}
 
-WICHTIG - Aufgabenverteilung:
-Für jedes Unterthema wird JEDER gewählte Aufgabentyp verwendet.
-Pro Aufgabentyp werden genau {num_questions} Fragen/Teilaufgaben erstellt.
+WICHTIG - Klare Struktur pro Unterthema:
+• Jedes Unterthema bekommt eine festgelegte Anzahl von Aufgaben
+• Pro Unterthema: {num_questions} Aufgaben gleichmäßig auf die Aufgabentypen verteilt
+• Jede Hauptaufgabe enthält 3-5 konkrete Unteraufgaben/Beispiele
+• Ausgewogene Mischung der Aufgabentypen innerhalb jedes Unterthemas
 
 NEU: Strukturiere jede Aufgabe mit einer Hauptfrage und mehreren Unteraufgaben:
 • Hauptfrage: z.B. "Unterstreiche alle Pluralformen in diesem Satz:"
-• Unteraufgaben: 2-3 konkrete Beispiele als Bullet Points
+• Unteraufgaben: 3-5 konkrete Beispiele als Bullet Points
 
 Verfügbare Aufgabentypen mit Beschreibungen:
 
@@ -249,7 +257,8 @@ Gestaltungshinweise:
 • {language_instruction}
 • Typische Fehlerquellen gezielt einbauen
 • Kurze, präzise Aufgabenstellungen
-• Pro Hauptaufgabe 2-3 Unteraufgaben erstellen
+• Pro Hauptaufgabe 3-5 Unteraufgaben erstellen
+• VARIATION: Wechsele regelmäßig zwischen verschiedenen Aufgabentypen innerhalb jedes Unterthemas
 
 ------------------------------------------------------------
 AUSGABEFORMAT: JSON
@@ -257,7 +266,7 @@ AUSGABEFORMAT: JSON
 
 Gib die Aufgaben im folgenden JSON-Format aus (nur das JSON, keine weiteren Texte):
 
-Für Aufgaben mit Unteraufgaben (BEVORZUGT):
+Für Aufgaben mit Unteraufgaben (BEVORZUGT für Rechenaufgaben, Lückentexte, etc.):
 {{
   "metadata": {{
     "topic": "{topic_text}",
@@ -281,7 +290,13 @@ Für Aufgaben mit Unteraufgaben (BEVORZUGT):
           "question": "Konkrete Beispielaufgabe 2",
           "answer": "Die korrekte Antwort",
           "explanation": "Kurze Erklärung"
-        }}
+        }},
+        {{
+          "question": "Konkrete Beispielaufgabe 3",
+          "answer": "Die korrekte Antwort",
+          "explanation": "Kurze Erklärung"
+        }},
+        ... (3-5 Unteraufgaben pro Hauptaufgabe)
       ],
       "explanation": "Allgemeine Erklärung für die ganze Aufgabe (optional)"
     }},
@@ -289,7 +304,7 @@ Für Aufgaben mit Unteraufgaben (BEVORZUGT):
   ]
 }}
 
-Für einfache Aufgaben (nur wenn nötig, z.B. Multiple Choice):
+Für einfache Aufgaben (nur für Multiple Choice und ähnliche):
 {{
   "exercises": [
     {{
@@ -304,10 +319,11 @@ Für einfache Aufgaben (nur wenn nötig, z.B. Multiple Choice):
   ]
 }}
 
-WICHTIG:
-• Bevorzuge das Format mit sub_questions für bessere Strukturierung
+WICHTIG - Qualitätskontrolle:
+• Verwende Multiple Choice SPARSAM (höchstens 30% aller Aufgaben)
+• Bevorzuge das Format mit sub_questions für bessere Strukturierung und mehr Übung
 • Gib NUR valides JSON aus
 • Keine zusätzlichen Texte vor oder nach dem JSON
 • Alle Strings müssen in Anführungszeichen
-• Jede Hauptaufgabe sollte 2-3 Unteraufgaben haben
-• Unteraufgaben müssen sinnvoll zusammengehören"""
+• Jede Hauptaufgabe sollte 3-5 Unteraufgaben haben
+• Gleichmäßige Verteilung pro Unterthema ist wichtiger als strikte Aufgabentyp-Reihenfolge"""

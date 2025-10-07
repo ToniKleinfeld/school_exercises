@@ -183,19 +183,22 @@ class PromptGenerator:
             exercise_types = [exercise_types]
 
         num_exercise_types = len(exercise_types)
-        exercises_per_type = exercises_per_subtopic  # This is now questions per type
-        total_per_subtopic = num_exercise_types * exercises_per_type
-        total_exercises = total_per_subtopic * len(subtopic_list)
+        num_subtopics = len(subtopic_list)
+        exercises_per_subtopic_total = exercises_per_subtopic  # Anzahl Aufgaben PRO Unterthema
+        total_exercises = num_subtopics * exercises_per_subtopic_total
 
-        distribution_text = f"Insgesamt {total_exercises} Aufgaben verteilt auf {len(subtopic_list)} Unterthemen und {num_exercise_types} Aufgabentypen:\n"
-        distribution_text += f"Pro Unterthema: {num_exercise_types} Aufgaben (eine pro Aufgabentyp)\n"
-        distribution_text += f"Pro Aufgabentyp: {exercises_per_type} Fragen/Teilaufgaben\n"
-        distribution_text += f"\nGewählte Aufgabentypen: {', '.join(exercise_types)}"
+        distribution_text = f"Insgesamt {total_exercises} Aufgaben verteilt auf {num_subtopics} Unterthemen:\n"
+        distribution_text += f"Pro Unterthema: {exercises_per_subtopic_total} Aufgaben\n"
+        distribution_text += "Jede Aufgabe enthält 3-5 Unteraufgaben/Teilfragen\n"
+        distribution_text += f"\nGewählte Aufgabentypen: {', '.join(exercise_types)}\n"
+        distribution_text += f"Unterthemen: {', '.join(subtopic_list)}\n"
 
-        for i, subtopic in enumerate(subtopic_list, 1):
-            distribution_text += f"\n\nÜbungsbereich {i}: {subtopic}\n"
-            distribution_text += f"   → {num_exercise_types} Aufgaben (je eine pro Aufgabentyp)\n"
-            distribution_text += f"   → Jede Aufgabe enthält {exercises_per_type} aufgabentypische Fragen/Teilaufgaben"
+        distribution_text += "\nWICHTIG - Struktur pro Unterthema:\n"
+        distribution_text += f"• Jedes Unterthema bekommt genau {exercises_per_subtopic_total} Aufgaben\n"
+        distribution_text += f"• Die {exercises_per_subtopic_total} Aufgaben werden gleichmäßig auf die {num_exercise_types} Aufgabentypen verteilt\n"
+        distribution_text += "• Jede Hauptaufgabe enthält 3-5 konkrete Unteraufgaben/Beispiele\n"
+        distribution_text += "• Multiple Choice sollte höchstens 30% aller Aufgaben ausmachen\n"
+        distribution_text += "• Bevorzuge Aufgaben mit sub_questions für mehr Übungsvielfalt"
 
         return distribution_text
 
@@ -209,24 +212,39 @@ class PromptGenerator:
 
         instructions = []
         instructions.append("STRUKTUR DER AUFGABENERSTELLUNG:\n")
+        instructions.append(f"Erstelle insgesamt {len(subtopic_list) * exercises_per_subtopic} Aufgaben:")
+        instructions.append(f"• {exercises_per_subtopic} Aufgaben pro Unterthema")
+        instructions.append(f"• {len(subtopic_list)} Unterthemen: {', '.join(subtopic_list)}")
+        instructions.append(f"• Verfügbare Aufgabentypen: {', '.join(exercise_types)}")
+        instructions.append("")
+        instructions.append("DETAILLIERTE VERTEILUNG PRO UNTERTHEMA:")
 
+        # Erstelle detaillierte Anweisungen für jedes Unterthema
         for i, subtopic in enumerate(subtopic_list, 1):
-            instructions.append(f"Übungsbereich {i}: {subtopic}")
+            instructions.append(f"\nUnterthema {i}: {subtopic}")
+            instructions.append(f"   → Erstelle genau {exercises_per_subtopic} Aufgaben für dieses Unterthema")
             instructions.append(
-                f"   Erstelle FÜR JEDEN der {len(exercise_types)} ausgewählten Aufgabentypen eine separate Aufgabe:"
+                f"   → Verteile die {exercises_per_subtopic} Aufgaben gleichmäßig auf die Aufgabentypen:"
             )
-            instructions.append("")
 
-            for j, ex_type in enumerate(exercise_types, 1):
-                instructions.append(f"   Aufgabe {i}.{j} - Typ: {ex_type}")
-                instructions.append(f"      → Fokus: {subtopic}")
-                instructions.append(
-                    f"      → Enthält genau {exercises_per_subtopic} aufgabentypische Fragen/Teilaufgaben"
-                )
-                instructions.append(f"      → Nutze die spezifischen Gestaltungshinweise für {ex_type}")
-                instructions.append("")
+            # Berechne Verteilung der Aufgabentypen für dieses Unterthema
+            exercises_per_type = exercises_per_subtopic // len(exercise_types)
+            remainder = exercises_per_subtopic % len(exercise_types)
 
-            instructions.append("")
+            for j, ex_type in enumerate(exercise_types):
+                count = exercises_per_type + (1 if j < remainder else 0)
+                if count > 0:
+                    instructions.append(f"     • {count}x {ex_type}")
+
+            instructions.append("   → Jede Aufgabe enthält 3-5 konkrete Unteraufgaben/Beispiele")
+            instructions.append(f"   → Fokus: {subtopic} (alle Beispiele sollen zu diesem Thema passen)")
+
+        instructions.append("")
+        instructions.append("WICHTIGE QUALITÄTSREGELN:")
+        instructions.append("• Jede Hauptaufgabe MUSS 3-5 sub_questions enthalten")
+        instructions.append("• Multiple Choice nur in Maßen verwenden (max. 30%)")
+        instructions.append("• Alle Beispiele müssen zum jeweiligen Unterthema passen")
+        instructions.append("• Schwierigkeitsgrad altersgerecht anpassen")
 
         return "\n".join(instructions)
 
