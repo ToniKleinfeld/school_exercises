@@ -81,30 +81,34 @@ class PromptGeneratorTab:
         rounded_container = RoundedFrame(
             self.parent,
             width=240,  # Kleinere, inhaltbasierte Breite
-            height=65,  # Angepasste Höhe
+            height=60,  # Angepasste Höhe
             corner_radius=16,
             bg_color="white",
             border_color="black",
             border_width=1,
-            padding=15,
+            padding=10,  # Reduziert auf 10px
         )
         # Zentriert ohne sticky - wird nicht gestreckt
         rounded_container.grid(row=8, column=0, columnspan=2, pady=(10, 10))
 
         # Hole den inneren Frame für Widgets
         mode_frame = rounded_container.get_frame()
+        
+        # Container für zentrierte Anordnung
+        center_container = tk.Frame(mode_frame, bg="white")
+        center_container.pack(expand=True)
 
         # PDF Label
-        pdf_label = tk.Label(mode_frame, text="PDF", font=LABEL_FONT, bg="white")
+        pdf_label = tk.Label(center_container, text="PDF", font=LABEL_FONT, bg="white")
         pdf_label.pack(side=tk.LEFT, padx=8)
 
         # Toggle Switch
-        self.toggle_switch = ToggleSwitch(mode_frame, command=self.on_mode_changed)
+        self.toggle_switch = ToggleSwitch(center_container, command=self.on_mode_changed)
         self.toggle_switch.configure(bg="white")
-        self.toggle_switch.pack(side=tk.LEFT, padx=12)
+        self.toggle_switch.pack(side=tk.LEFT, padx=10)
 
         # JSON Label
-        json_label = tk.Label(mode_frame, text="JSON", font=LABEL_FONT, bg="white")
+        json_label = tk.Label(center_container, text="JSON", font=LABEL_FONT, bg="white")
         json_label.pack(side=tk.LEFT, padx=8)
 
         # Generate button
