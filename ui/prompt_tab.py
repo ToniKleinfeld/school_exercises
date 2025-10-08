@@ -1,16 +1,20 @@
 """
 Prompt Generator Tab
 
-Tab component for the unified prompt generator with PDF/JSON toggle.
+Tab component for the unified prompt generator with PDF/JSON toggle.        self.copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
-Author: Toni Kleinfeld
+    def create_json_im        # Output text area with scrollbar
+        self.output_text = scrolledtext.ScrolledText(self.parent, height=8, width=70, wrap=tk.WORD, font=OUTPUT_FONT)
+        self.output_text.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+
+        # Configure text area to expand
+        self.parent.rowconfigure(10, weight=1)ab(self, parent_frame):oni Kleinfeld
 Date: October 2025
 """
 
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 import pyperclip
-from .widgets import ToggleSwitch, RoundedFrame
 from config import (
     GRADES,
     SUBJECTS,
@@ -43,7 +47,6 @@ class PromptGeneratorTab:
         self.parent = parent_frame
         self.root = root
         self.prompt_generator = prompt_generator
-        self.output_mode = "pdf"  # Default to PDF mode
 
         # Variables for input fields
         self.grade_var = None
@@ -56,7 +59,6 @@ class PromptGeneratorTab:
         self.exercise_frame = None
 
         # UI elements
-        self.toggle_switch = None
         self.generate_button = None
         self.copy_button = None
         self.output_label = None
@@ -70,57 +72,22 @@ class PromptGeneratorTab:
         self.parent.columnconfigure(1, weight=1)
 
         # Title
-        title_label = ttk.Label(self.parent, text="Prompt Generator", font=MAIN_FONT)
+        title_label = ttk.Label(self.parent, text="JSON Prompt Generator", font=MAIN_FONT)
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
 
         # Input fields
         self.create_input_fields(start_row=1)
 
-        # Output mode selector (PDF/JSON Toggle) - ÜBER dem Generate Button
-        # Erstelle einen RoundedFrame Container (mittig und nur um den Inhalt)
-        rounded_container = RoundedFrame(
-            self.parent,
-            width=240,  # Kleinere, inhaltbasierte Breite
-            height=60,  # Angepasste Höhe
-            corner_radius=16,
-            bg_color="white",
-            border_color="black",
-            border_width=1,
-            padding=10,  # Reduziert auf 10px
-        )
-        # Zentriert ohne sticky - wird nicht gestreckt
-        rounded_container.grid(row=8, column=0, columnspan=2, pady=(10, 10))
-
-        # Hole den inneren Frame für Widgets
-        mode_frame = rounded_container.get_frame()
-        
-        # Container für zentrierte Anordnung
-        center_container = tk.Frame(mode_frame, bg="white")
-        center_container.pack(expand=True)
-
-        # PDF Label
-        pdf_label = tk.Label(center_container, text="PDF", font=LABEL_FONT, bg="white")
-        pdf_label.pack(side=tk.LEFT, padx=8)
-
-        # Toggle Switch
-        self.toggle_switch = ToggleSwitch(center_container, command=self.on_mode_changed)
-        self.toggle_switch.configure(bg="white")
-        self.toggle_switch.pack(side=tk.LEFT, padx=10)
-
-        # JSON Label
-        json_label = tk.Label(center_container, text="JSON", font=LABEL_FONT, bg="white")
-        json_label.pack(side=tk.LEFT, padx=8)
-
         # Generate button
         self.generate_button = tk.Button(
             self.parent,
-            text=GENERATE_BUTTON_TEXT,
+            text="Generate JSON Prompt",
             command=self.generate_prompt,
             font=LABEL_FONT,
             relief="raised",
             bd=2,
         )
-        self.generate_button.grid(row=9, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
+        self.generate_button.grid(row=8, column=0, columnspan=2, pady=20, sticky=(tk.W, tk.E))
 
         # Output section
         self.create_output_section()
@@ -134,16 +101,7 @@ class PromptGeneratorTab:
             relief="raised",
             bd=2,
         )
-        self.copy_button.grid(row=12, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
-
-    def on_mode_changed(self, is_json):
-        """Handle output mode toggle change"""
-        self.output_mode = "json" if is_json else "pdf"
-        # Update button text
-        if is_json:
-            self.generate_button.config(text="Generate JSON Prompt")
-        else:
-            self.generate_button.config(text=GENERATE_BUTTON_TEXT)
+        self.copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
     def create_input_fields(self, start_row=1):
         """Create all input fields with labels"""
@@ -247,8 +205,8 @@ class PromptGeneratorTab:
     def create_output_section(self):
         """Create the output section with generated prompt display"""
         # Output label
-        self.output_label = ttk.Label(self.parent, text="Generierter Prompt:", font=LABEL_FONT)
-        self.output_label.grid(row=10, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
+        self.output_label = ttk.Label(self.parent, text="Generierter JSON-Prompt:", font=LABEL_FONT)
+        self.output_label.grid(row=9, column=0, columnspan=2, sticky=tk.W, pady=(20, 5))
 
         # Output text area with scrollbar
         self.output_text = scrolledtext.ScrolledText(self.parent, height=8, width=70, wrap=tk.WORD, font=OUTPUT_FONT)
@@ -288,17 +246,10 @@ class PromptGeneratorTab:
             messagebox.showerror("Eingabefehler", error_message)
             return
 
-        # Generate the prompt based on output mode
-        if self.output_mode == "json":
-            prompt = self.prompt_generator.create_json_prompt_template(
-                num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
-            )
-            self.output_label.config(text="Generierter JSON-Prompt:")
-        else:
-            prompt = self.prompt_generator.create_prompt_template(
-                num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
-            )
-            self.output_label.config(text="Generierter Prompt:")
+        # Generate JSON prompt
+        prompt = self.prompt_generator.create_json_prompt_template(
+            num_questions, grade, subject, main_topic, subtopics, selected_exercise_types
+        )
 
         # Display the prompt
         self.output_text.delete(1.0, tk.END)

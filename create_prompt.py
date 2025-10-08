@@ -8,7 +8,7 @@ Author: Toni Kleinfeld
 Date: October 2025
 """
 
-from config import PROMPT_TEMPLATE, JSON_PROMPT_TEMPLATE, EXERCISE_TYPE_DESCRIPTIONS
+from config import JSON_PROMPT_TEMPLATE, EXERCISE_TYPE_DESCRIPTIONS
 
 
 class PromptGenerator:
@@ -17,68 +17,6 @@ class PromptGenerator:
     def __init__(self):
         """Initialize the prompt generator"""
         pass
-
-    def create_prompt_template(self, num_questions, grade, subject, main_topic, subtopics, exercise_types):
-        """
-        Create the formatted prompt template
-
-        Args:
-            num_questions (str): Number of questions per exercise type
-            grade (str): Grade/class level
-            subject (str): Subject area
-            main_topic (str): Main topic
-            subtopics (str): Subtopics separated by commas
-            exercise_types (list): List of exercise types
-
-        Returns:
-            str: Formatted prompt for AI
-        """
-        # Create structured topic text and subtopic analysis
-        topic_text, subtopic_list = self._format_topic_structure_with_list(main_topic, subtopics)
-
-        # num_questions = Anzahl der Fragen PRO Aufgabentyp
-        questions_per_type = int(num_questions)
-
-        # Handle both list and string input for backwards compatibility
-        if isinstance(exercise_types, list) and subtopic_list:
-            # Create distribution text based on subtopics and exercise types
-            distribution_info = self._create_subtopic_distribution(subtopic_list, questions_per_type, exercise_types)
-        else:
-            # Fallback for old behavior
-            if isinstance(exercise_types, list):
-                total_exercises = int(num_questions) * len(exercise_types)
-                distribution_parts = []
-                for exercise_type in exercise_types:
-                    distribution_parts.append(f"{num_questions} {exercise_type}")
-                distribution_text = ", ".join(distribution_parts)
-                distribution_info = f"Insgesamt {total_exercises} Aufgaben: {distribution_text}"
-            else:
-                distribution_info = f"{num_questions} {exercise_types}"
-
-        # Determine age-appropriate language level
-        grade_level = self._get_grade_level(grade)
-        language_instruction = self._get_language_instruction(subject, grade_level)
-
-        # Create exercise type list with detailed descriptions
-        exercise_type_details = self._format_exercise_type_details(exercise_types)
-
-        # Prepare subtopic instructions
-        subtopic_instructions = self._create_subtopic_instructions(subtopic_list, questions_per_type, exercise_types)
-
-        # Use template from config with all dynamic values
-        prompt = PROMPT_TEMPLATE.format(
-            topic_text=topic_text,
-            grade=grade,
-            subject=subject,
-            exercise_type_details=exercise_type_details,
-            distribution_info=distribution_info,
-            language_instruction=language_instruction,
-            subtopic_instructions=subtopic_instructions,
-            grade_level=grade_level,
-            num_questions=num_questions,
-        )
-
-        return prompt
 
     def create_json_prompt_template(self, num_questions, grade, subject, main_topic, subtopics, exercise_types):
         """

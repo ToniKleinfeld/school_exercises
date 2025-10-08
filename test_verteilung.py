@@ -44,12 +44,12 @@ def test_neue_verteilung():
     print(f"  → Gesamt Aufgaben: {len(subtopic_list) * len(exercise_types)}")
     print(f"  → Gesamt Fragen: {len(subtopic_list) * len(exercise_types) * int(num_questions)}")
 
-    # Generiere den Prompt
+    # Generiere den JSON-Prompt
     print("\n" + "=" * 80)
-    print("Generierter Prompt (Auszug):")
+    print("Generierter JSON-Prompt (Auszug):")
     print("=" * 80)
 
-    prompt = generator.create_prompt_template(num_questions, grade, subject, main_topic, subtopics, exercise_types)
+    prompt = generator.create_json_prompt_template(num_questions, grade, subject, main_topic, subtopics, exercise_types)
 
     # Zeige nur die Distribution Info
     lines = prompt.split("\n")

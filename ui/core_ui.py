@@ -54,9 +54,9 @@ class AIPromptGeneratorUI:
         self.notebook = ttk.Notebook(self.root)
         self.notebook.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
 
-        # Tab 1: Unified Prompt Generator (PDF/JSON)
+        # Tab 1: JSON Prompt Generator
         prompt_tab_frame = ttk.Frame(self.notebook, padding="20")
-        self.notebook.add(prompt_tab_frame, text="Prompt Generator")
+        self.notebook.add(prompt_tab_frame, text="JSON Prompt Generator")
         self.prompt_tab_instance = PromptGeneratorTab(prompt_tab_frame, self.root, self.prompt_generator)
 
         # Tab 2: JSON Import & PDF Generator
