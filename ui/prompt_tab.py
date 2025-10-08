@@ -101,7 +101,7 @@ class PromptGeneratorTab:
             relief="raised",
             bd=2,
         )
-        self.copy_button.grid(row=11, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
+        self.copy_button.grid(row=12, column=0, columnspan=2, pady=10, sticky=(tk.W, tk.E))
 
     def create_input_fields(self, start_row=1):
         """Create all input fields with labels"""
@@ -210,10 +210,10 @@ class PromptGeneratorTab:
 
         # Output text area with scrollbar
         self.output_text = scrolledtext.ScrolledText(self.parent, height=8, width=70, wrap=tk.WORD, font=OUTPUT_FONT)
-        self.output_text.grid(row=11, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+        self.output_text.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
 
         # Configure text area to expand
-        self.parent.rowconfigure(11, weight=1)
+        self.parent.rowconfigure(10, weight=1)
 
     def generate_prompt(self):
         """Generate the AI prompt based on user inputs"""
