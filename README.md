@@ -1,6 +1,6 @@
-# KI Prompt Generator für Bildungsaufgaben
+# KI Prompt Generator für Übungsaufgaben
 
-Eine Python-Anwendung mit deutscher GUI zur Generierung von KI-Prompts für Übungsaufgaben, für das deutsche Schulsystem.
+Eine Python-Anwendung mit deutscher GUI zur Generierung von KI-Prompts für Übungsaufgaben in JSON format welche zu einer PDF konvertiert werden kann, für das deutsche Schulsystem.
 
 ## Zweck der Anwendung
 
@@ -61,10 +61,6 @@ school_exercises/
 ├── config.py                 # Konfiguration und Templates
 └── README.md
 ```
-
-## Zusatz
-
-Sollten diese Prompts dauerhaft gute Ergebnisse zum lernen hervorbringen, wird evtl eine web version folgen , im idealfall mit direkter ausgabe von PDF. 
 
 ## Lizenz
 
